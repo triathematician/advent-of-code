@@ -1,0 +1,12 @@
+val leaders = """
+Day1: 1:16/2:05 (groups of ints)
+Day2: 3:43/6:16 (rock-paper-scissors)
+Day3: 3:03/5:24 (strings)
+Day4: 2:12/3:22 (intranges)
+Day5: 6:42/7:58 (stacks and moves)
+Day6: 1:52/2:25 (strings, chars)
+Day7: 10:49/14:47 (tree, commands)
+Day8: 4:30/10:12 (int matrix, rows/cols)
+Day9: 7:32/14:08 (moves in a matrix)
+Day10: 5:17/12:17 (computing signals)
+""".trimIndent()
