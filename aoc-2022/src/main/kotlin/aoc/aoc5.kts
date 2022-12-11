@@ -1,5 +1,4 @@
-import aoc.AocRunner
-import aoc.mapLines
+import aoc.*
 
 val input1="""
             [J] [Z] [G]            
@@ -529,17 +528,18 @@ val stacks9001 = stacks9000.map { it.toMutableList() }.toMutableList()
 
 fun String.itemOnStack(n: Int) = getOrNull(n*4-3) ?: ' '
 
-println("Initial queues:")
+println("\n${ANSI_GREEN}Initial queues:$ANSI_RESET")
 printStacks(stacks9000)
-println("Final stacks (9000):")
-printStacks(stacks9000)
-println("Final stacks (9001):")
-printStacks(stacks9001)
 
 input2.onEach {
     it.applyTo(stacks9000, reverse = true)
     it.applyTo(stacks9001, reverse = false)
 }
+
+println("\n${ANSI_GREEN}Final stacks (9000):$ANSI_RESET")
+printStacks(stacks9000)
+println("\n${ANSI_GREEN}Final stacks (9001):$ANSI_RESET")
+printStacks(stacks9001)
 
 AocRunner(5, "Leaderboard: 6:42/7:58, Answers: ZRLJGSCTR/PRTTGRFPB",
     stacks9000.topOfStacks(),
@@ -549,7 +549,12 @@ AocRunner(5, "Leaderboard: 6:42/7:58, Answers: ZRLJGSCTR/PRTTGRFPB",
 typealias StackList = MutableList<MutableList<Char>>
 fun StackList.topOfStacks() = String(map { it.last() }.toCharArray())
 
-fun printStacks(stacks: StackList) = (1..9).forEach { println("  $it: ${stacks[it - 1]}") }
+fun printStacks(stacks: StackList) = StackVisualizer(stacks).apply {
+    stackDelim = ' '
+    itemBefore = '['
+    itemAfter = ']'
+    borderTop = false
+}.visualize()
 
 typealias Move = Triple<Int, Int, Int>
 

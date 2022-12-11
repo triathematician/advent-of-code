@@ -165,6 +165,14 @@ fun List<Monkey>.doInspections(count: Int, div3: Long) {
 
 // part 1
 
+println("Initial Monkey Holdings:")
+StackVisualizer(input.map { it.items }).apply {
+    stackDelim = ' '
+    itemBefore = '['
+    itemAfter = ']'
+    borderTop = false
+}.visualize()
+
 val in1 = input.map { it.copy() }
 in1.doInspections(20, div3 = 3)
 
