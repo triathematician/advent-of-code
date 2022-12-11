@@ -37,16 +37,41 @@ fun String.alternateRedGreen() = toCharArray().toList().chunked(2).joinToString(
 /** Convert to an [IntRange], default separator "-" */
 fun String.toIntRange(delim: String = "-") = split(delim).let { it[0].toInt().rangeTo(it[1].toInt()) }
 
+/** Splits this string on [delim] and parses the resulting chunks as integers. */
+fun String.ints(delim: String = ",") = split(delim).map { it.trim().toInt() }
+/** Splits this string on [delim] and parses the resulting chunks as longs. */
+fun String.longs(delim: String = ",") = split(delim).map { it.trim().toLong() }
+
+/** Returns the substring of this string that is after the first occurrence of [before] and before the first occurrence of [after]. */
+fun String.between(before: String, after: String) = substringAfter(before).substringBefore(after)
+/** Splits on given delimiter, mapping to result. */
+fun <X> String.splitOn(delim: String, op: (String) -> X) = split(delim).map(op)
+
+/** Returns the nth chunk from the specified item in this list. */
+fun List<String>.chunk(index: Int, n: Int) = this[index].chunk(n)
+/** Returns the nth chunk from the specified item in this list, parsed as an integer. */
+fun List<String>.chunkint(index: Int, n: Int) = this[index].chunkint(n)
+/** Returns the nth chunk from the specified item in this list, parsed as a long. */
+fun List<String>.chunklong(index: Int, n: Int) = this[index].chunklong(n)
+
+/** Returns the nth chunk from this string. */
+fun String.chunk(n: Int) = trim().split(" ")[n]
+/** Returns the nth chunk from this string, parsed as an integer. */
+fun String.chunkint(n: Int) = trim().split(" ")[n].toInt()
+/** Returns the nth chunk from this string, parsed as a long. */
+fun String.chunklong(n: Int) = trim().split(" ")[n].toLong()
+
+//endregion
+
+//region LINE AND GROUP PARSING
+
 /** Divide into groups with line breaks. */
 fun <X> String.groupedOnBlankLines(op: (String) -> X) = trim().split("\n\n").map(op)
 /** Maps lines to objects. */
 fun <X> String.mapLines(op: (String) -> X) = trim().lines().map(op)
 
-/** Splits on given delimiter, mapping to result. */
-fun <X> String.splitOn(delim: String, op: (String) -> X) = split(delim).map(op)
-
 /** Convert each line to an Int. */
-fun String.linesToInt() = lines().map { it.toInt() }
+fun String.linesToInt() = mapLines { it.toInt() }
 
 /** Splits string to list of lists. */
 fun String.splitToGroups(groupSep: String, sep: String) = trim().split(groupSep).map { it.split(sep) }
