@@ -30,6 +30,19 @@ fun String.alternateRedGreen() = toCharArray().toList().chunked(2).joinToString(
     "${ANSI_RED}${it[0]}" + (if (it.size == 2) "${ANSI_GREEN}${it[1]}" else "")
 } + ANSI_RESET
 
+fun alignWord(word: String, blockLength: Int, align: String): String {
+    return when (align.toLowerCase()) {
+        "left" -> String.format("%-${blockLength}s", word)
+        "right" -> String.format("%${blockLength}s", word)
+        "center" -> {
+            val prefix = (blockLength - word.length) / 2
+            val suffix = blockLength - prefix - word.length
+            "${" ".repeat(prefix)}$word${" ".repeat(suffix)}"
+        }
+        else -> word
+    }
+}
+
 //endregion
 
 //region PARSING

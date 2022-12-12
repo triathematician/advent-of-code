@@ -42,19 +42,6 @@ class StackVisualizer(val stacks: List<List<Any?>>) {
     }
 }
 
-fun alignWord(word: String, blockLength: Int, align: String): String {
-    return when (align.toLowerCase()) {
-        "left" -> String.format("%-${blockLength}s", word)
-        "right" -> String.format("%${blockLength}s", word)
-        "center" -> {
-            val prefix = (blockLength - word.length) / 2
-            val suffix = blockLength - prefix - word.length
-            "${" ".repeat(prefix)}$word${" ".repeat(suffix)}"
-        }
-        else -> word
-    }
-}
-
 fun main() {
     val stacks = listOf(
         listOf("apple", "banana"),

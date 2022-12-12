@@ -12,7 +12,7 @@ class AocParser(_input: String) {
     //region OUTPUT TYPES
 
     val pairChars: List<PairChar> by lazy { mapLines { it[0] to it[2] } }
-    val charMatrix: List<List<Char>> by lazy { mapLines { it.toList() } }
+    val charGrid: List<List<Char>> by lazy { mapLines { it.toList() } }
     val intMatrix: List<List<Int>> by lazy { mapMatrix { it.toInt() } }
     val intrangeMatrix: List<List<IntRange>> by lazy { mapMatrix { it.toIntRange() } }
 
