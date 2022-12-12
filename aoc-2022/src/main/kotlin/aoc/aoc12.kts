@@ -86,8 +86,8 @@ fun Coord.adjUp(input: Maze) = adj(input).filter { testUp(input, this, it) }
 fun Coord.adjDown(input: Maze) = adj(input).filter { testDown(input, this, it) }
 
 fun testUp(input: Maze, from: Coord, to: Coord): Boolean {
-    val ch = input[from.first][from.second].let { if (it == 'S') 'a' else if (it == 'E') 'z' else it }
-    val testCh = input[to.first][to.second].let { if (it == 'S') 'a' else if (it == 'E') 'z' else it }
+    val ch = input[from].let { if (it == 'S') 'a' else if (it == 'E') 'z' else it }
+    val testCh = input[to].let { if (it == 'S') 'a' else if (it == 'E') 'z' else it }
     return testCh - ch <= 1
 }
 fun testDown(input: Maze, from: Coord, to: Coord) = testUp(input, to, from)
