@@ -2,7 +2,7 @@ import aoc.AocParser.Companion.parselines
 import aoc.AocRunner
 import aoc.print
 
-val day = 0
+val day = 15
 
 val testInput = """
 
