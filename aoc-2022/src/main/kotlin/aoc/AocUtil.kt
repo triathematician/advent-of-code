@@ -1,5 +1,6 @@
 package aoc
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -46,6 +47,10 @@ fun alignWord(word: String, blockLength: Int, align: String): String {
 //endregion
 
 //region PARSING
+
+/** Get list of objects, from e.g. [1, 2, [3]] */
+val String.parselist: List<*>
+    get() = ObjectMapper().readValue(this, List::class.java)
 
 /** Convert to an [IntRange], default separator "-" */
 fun String.toIntRange(delim: String = "-") = split(delim).let { it[0].toInt().rangeTo(it[1].toInt()) }
