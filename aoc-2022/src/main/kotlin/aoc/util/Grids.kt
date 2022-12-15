@@ -1,4 +1,4 @@
-package aoc
+package aoc.util
 
 // Utilities for working with a rectangular grid of values
 
@@ -8,6 +8,11 @@ fun Coord.adj(input: List<List<*>>) =
     listOf(left, right, top, bottom).filter {
         it.first in input.indices && it.second in input[0].indices
     }
+
+val Coord.x
+    get() = first
+val Coord.y
+    get() = second
 
 val Coord.left
     get() = first-1 to second

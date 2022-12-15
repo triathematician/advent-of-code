@@ -1,4 +1,4 @@
-package aoc
+package aoc.util
 
 /** Find way from start to target, given set of adjacencies. */
 class Pathfinder<X>(val start: X, val adj: (X) -> Iterable<X>) {

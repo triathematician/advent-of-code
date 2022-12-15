@@ -1,10 +1,9 @@
 package aoc
 
+import aoc.util.ANSI_GREEN
+import aoc.util.ANSI_RED
+import aoc.util.ANSI_RESET
 import com.fasterxml.jackson.databind.ObjectMapper
-import java.net.URI
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
 
 //region TYPE HELPERS
 

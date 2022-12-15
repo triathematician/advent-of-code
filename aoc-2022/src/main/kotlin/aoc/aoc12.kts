@@ -1,5 +1,6 @@
-import aoc.*
+import aoc.util.*
 import aoc.AocParser.Companion.parse
+import aoc.AocRunner
 
 val day = 12
 

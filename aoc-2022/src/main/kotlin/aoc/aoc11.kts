@@ -1,5 +1,6 @@
 import aoc.*
 import aoc.AocParser.Companion.parselines
+import aoc.vis.StackVisualizer
 
 val day = 11
 

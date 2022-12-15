@@ -1,5 +1,5 @@
-import aoc.ANSI_GREEN
-import aoc.ANSI_RESET
+import aoc.util.ANSI_GREEN
+import aoc.util.ANSI_RESET
 import aoc.AocParser.Companion.parselines
 import aoc.AocRunner
 

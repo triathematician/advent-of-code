@@ -1,4 +1,7 @@
-import aoc.*
+import aoc.util.*
+import aoc.AocRunner
+import aoc.mapLines
+import aoc.vis.StackVisualizer
 
 val input1="""
             [J] [Z] [G]            

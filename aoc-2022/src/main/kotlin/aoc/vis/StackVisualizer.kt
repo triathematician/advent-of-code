@@ -1,4 +1,7 @@
-package aoc
+package aoc.vis
+
+import aoc.alignWord
+import aoc.util.*
 
 class StackVisualizer(val stacks: List<List<Any?>>) {
     var align = "center"

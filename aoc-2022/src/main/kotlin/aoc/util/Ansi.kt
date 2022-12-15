@@ -1,4 +1,4 @@
-package aoc
+package aoc.util
 
 const val ANSI_RESET = "\u001B[0m"
 const val ANSI_BOLD = "\u001B[1m"

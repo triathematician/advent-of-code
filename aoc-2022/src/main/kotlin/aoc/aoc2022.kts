@@ -1,4 +1,4 @@
-import aoc.*
+import aoc.util.*
 
 val leaders = """
 Day1: 1:16/2:05 (groups of ints)
@@ -14,10 +14,14 @@ Day10: 5:17/12:17 (computing signals)
 Day11: 13:07/18:05 (basic arithmetic)
 Day12: 7:39/9:45 (moving in a grid)
 Day13: 8:16/12:56 (sorting nested list)
+Day14: 10:33/13:54 (falling sand in a grid)
+Day15: 10:40/27:14 (grid search)
 """.trimIndent()
 
 val personalstats = """
 Day       Time    Rank  Score       Time    Rank  Score
+ 15   06:36:38   14288      0   07:48:04    9918      0
+ 14   08:37:34   18149      0   08:48:48   16949      0
  13   06:51:27   15548      0   06:57:10   14462      0
  12   06:03:11   14960      0   06:07:22   14124      0
  11   05:54:18   20231      0   06:10:41   14302      0

@@ -1,5 +1,6 @@
 package aoc
 
+import aoc.util.*
 import java.lang.String.format
 
 /** Runs an AOC day. */
