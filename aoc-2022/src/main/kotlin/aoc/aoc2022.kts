@@ -16,6 +16,8 @@ Day12: 7:39/9:45 (moving in a grid)
 Day13: 8:16/12:56 (sorting nested list)
 Day14: 10:33/13:54 (falling sand in a grid)
 Day15: 10:40/27:14 (grid search)
+Day16: 23:53/64:17 (graph search, with weighted edges)
+Day17: 24:14/40:48 (tetris)
 """.trimIndent()
 
 val personalstats = """
