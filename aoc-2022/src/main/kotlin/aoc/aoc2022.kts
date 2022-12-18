@@ -18,10 +18,12 @@ Day14: 10:33/13:54 (falling sand in a grid)
 Day15: 10:40/27:14 (grid search)
 Day16: 23:53/64:17 (graph search, with weighted edges)
 Day17: 24:14/40:48 (tetris)
+Day18: 2:55/12:29 (cube volumes)
 """.trimIndent()
 
 val personalstats = """
 Day       Time    Rank  Score       Time    Rank  Score
+ 18   07:37:35   11758      0   08:22:39    8598      0
  16   09:50:53    7488      0   21:03:40    8609      0
  15   06:36:38   14288      0   07:48:04    9918      0
  14   08:37:34   18149      0   08:48:48   16949      0
