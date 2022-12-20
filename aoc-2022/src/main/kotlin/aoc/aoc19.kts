@@ -188,7 +188,6 @@ answer1.print
 // part 2
 
 println("---")
-//val answer2 = 0
 val answer2 = input.take(3).map { it.geodes(32) }.also {
     println("Max geodes (2): $it")
 }.reduce { a, b -> a * b }

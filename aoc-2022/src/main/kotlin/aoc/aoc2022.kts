@@ -19,10 +19,14 @@ Day15: 10:40/27:14 (grid search)
 Day16: 23:53/64:17 (graph search, with weighted edges)
 Day17: 24:14/40:48 (tetris)
 Day18: 2:55/12:29 (cube volumes)
+Day19: 48:27/57:45 (BFS with pruning)
+Day20: (modulo)
 """.trimIndent()
 
 val personalstats = """
 Day       Time    Rank  Score       Time    Rank  Score
+ 20   01:08:50    1861      0   01:19:55    1627      0
+ 19   22:52:40    8817      0   23:40:03    7816      0
  18   07:37:35   11758      0   08:22:39    8598      0
  16   09:50:53    7488      0   21:03:40    8609      0
  15   06:36:38   14288      0   07:48:04    9918      0
