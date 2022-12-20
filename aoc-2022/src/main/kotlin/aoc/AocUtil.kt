@@ -55,9 +55,9 @@ val String.parselist: List<*>
 fun String.toIntRange(delim: String = "-") = split(delim).let { it[0].toInt().rangeTo(it[1].toInt()) }
 
 /** Splits this string on [delim] and parses the resulting chunks as integers. */
-fun String.ints(delim: String = ",") = split(delim).map { it.trim().toInt() }
+fun String.ints(delim: String = ",") = split(delim).mapNotNull { it.trim().toIntOrNull() }
 /** Splits this string on [delim] and parses the resulting chunks as longs. */
-fun String.longs(delim: String = ",") = split(delim).map { it.trim().toLong() }
+fun String.longs(delim: String = ",") = split(delim).mapNotNull { it.trim().toLongOrNull() }
 
 /** Returns the substring of this string that is after the first occurrence of [before] and before the first occurrence of [after]. */
 fun String.between(before: String, after: String) = substringAfter(before).substringBefore(after)
