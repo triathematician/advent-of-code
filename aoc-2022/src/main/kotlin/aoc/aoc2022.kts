@@ -1,4 +1,5 @@
 import aoc.util.*
+import java.lang.Math.log10
 
 val leaders = """
 Day1: 1:16/2:05 (groups of ints)
@@ -20,11 +21,13 @@ Day16: 23:53/64:17 (graph search, with weighted edges)
 Day17: 24:14/40:48 (tetris)
 Day18: 2:55/12:29 (cube volumes)
 Day19: 48:27/57:45 (BFS with pruning)
-Day20: (modulo)
+Day20: 15:41/21:14 (modulo)
+Day21: 4:28/16:15 (arithmetic tree)
 """.trimIndent()
 
 val personalstats = """
 Day       Time    Rank  Score       Time    Rank  Score
+ 21   06:44:05   10950      0   07:56:36    8537      0
  20   01:08:50    1861      0   01:19:55    1627      0
  19   22:52:40    8817      0   23:40:03    7816      0
  18   07:37:35   11758      0   08:22:39    8598      0
@@ -67,18 +70,21 @@ fun List<Int>.printSummary() {
 }
 
 fun List<Data>.printChart() {
-    val sortedRanks = (map { it.rank } + map { it.rank2 }).sorted()
-    val rankRange = 0..sortedRanks.last()
+    val rankOp = { it: Number -> kotlin.math.log2(it.toDouble()) - 9 }
+
+    val sortedRanks = (map { it.rank } + map { it.rank2 }).map(rankOp).sorted()
+    val rankMin = 0.0
+    val rankMax = sortedRanks.last()
 
     val chartHeight = 30
-    val rankRatio = (rankRange.last - rankRange.first) / chartHeight.toDouble()
+    val rankRatio = (rankMax - rankMin) / chartHeight.toDouble()
 
     val header = "%-3s | %-${chartHeight + 9}s | %-${chartHeight + 9}s |".format("Day", "Part 1", "Part 2")
     println(header)
     println("-".repeat(header.length))
     map { data ->
-        val barHeight1 = ((data.rank - rankRange.first) / rankRatio).toInt()
-        val barHeight2 = ((data.rank2 - rankRange.first) / rankRatio).toInt()
+        val barHeight1 = ((rankOp(data.rank) - rankMin) / rankRatio).toInt()
+        val barHeight2 = ((rankOp(data.rank2) - rankMin) / rankRatio).toInt()
 
         val bar1 = "*".repeat(barHeight1)
         val bar2 = "*".repeat(barHeight2)
