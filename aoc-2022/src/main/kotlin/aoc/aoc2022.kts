@@ -23,10 +23,12 @@ Day18: 2:55/12:29 (cube volumes)
 Day19: 48:27/57:45 (BFS with pruning)
 Day20: 15:41/21:14 (modulo)
 Day21: 4:28/16:15 (arithmetic tree)
+Day22: 19:04/74:31 (walking around a cube)
 """.trimIndent()
 
 val personalstats = """
 Day       Time    Rank  Score       Time    Rank  Score
+ 22   07:13:52    7229      0   08:52:41    3217      0
  21   06:44:05   10950      0   07:56:36    8537      0
  20   01:08:50    1861      0   01:19:55    1627      0
  19   22:52:40    8817      0   23:40:03    7816      0
