@@ -2,17 +2,25 @@ package aoc.util
 
 // Utilities for working with a rectangular grid of values
 
+typealias CharGrid = List<String>
 typealias Coord = Pair<Int, Int>
-
-fun Coord.adj(input: List<List<*>>) =
-    listOf(left, right, top, bottom).filter {
-        it.first in input.indices && it.second in input[0].indices
-    }
 
 val Coord.x
     get() = first
 val Coord.y
     get() = second
+val CharGrid.xrange
+    get() = get(0).indices
+val CharGrid.yrange
+    get() = indices
+
+fun CharGrid.at(c: Coord) = get(c.y).get(c.x)
+fun CharGrid.get(x: Int, y: Int) = get(y).get(x)
+
+fun Coord.adj(input: List<List<*>>) =
+    listOf(left, right, top, bottom).filter {
+        it.first in input.indices && it.second in input[0].indices
+    }
 
 val Coord.left
     get() = first-1 to second

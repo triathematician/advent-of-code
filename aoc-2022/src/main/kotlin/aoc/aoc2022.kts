@@ -1,5 +1,4 @@
 import aoc.util.*
-import java.lang.Math.log10
 
 val leaders = """
 Day1: 1:16/2:05 (groups of ints)
@@ -24,10 +23,14 @@ Day19: 48:27/57:45 (BFS with pruning)
 Day20: 15:41/21:14 (modulo)
 Day21: 4:28/16:15 (arithmetic tree)
 Day22: 19:04/74:31 (walking around a cube)
+Day23: 21:46/24:43 (moving in a grid)
+Day24: 
+Day25: 
 """.trimIndent()
 
 val personalstats = """
 Day       Time    Rank  Score       Time    Rank  Score
+ 23   07:48:57    6995      0   07:54:11    6742      0
  22   07:13:52    7229      0   08:52:41    3217      0
  21   06:44:05   10950      0   07:56:36    8537      0
  20   01:08:50    1861      0   01:19:55    1627      0
