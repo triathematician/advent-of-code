@@ -30,6 +30,7 @@ Day25:
 
 val personalstats = """
 Day       Time    Rank  Score       Time    Rank  Score
+ 24   08:35:45    5670      0   09:04:15    5520      0
  23   07:48:57    6995      0   07:54:11    6742      0
  22   07:13:52    7229      0   08:52:41    3217      0
  21   06:44:05   10950      0   07:56:36    8537      0
@@ -75,21 +76,21 @@ fun List<Int>.printSummary() {
 }
 
 fun List<Data>.printChart() {
-    val rankOp = { it: Number -> kotlin.math.log2(it.toDouble()) - 9 }
+    val rankOp = { it: Number -> kotlin.math.log2(it.toDouble()) }
 
     val sortedRanks = (map { it.rank } + map { it.rank2 }).map(rankOp).sorted()
-    val rankMin = 0.0
+    val rankMin = sortedRanks.first()
     val rankMax = sortedRanks.last()
 
-    val chartHeight = 30
+    val chartHeight = 20
     val rankRatio = (rankMax - rankMin) / chartHeight.toDouble()
 
     val header = "%-3s | %-${chartHeight + 9}s | %-${chartHeight + 9}s |".format("Day", "Part 1", "Part 2")
     println(header)
     println("-".repeat(header.length))
     map { data ->
-        val barHeight1 = ((rankOp(data.rank) - rankMin) / rankRatio).toInt()
-        val barHeight2 = ((rankOp(data.rank2) - rankMin) / rankRatio).toInt()
+        val barHeight1 = ((rankOp(data.rank) - rankMin) / rankRatio).toInt().coerceAtLeast(0)
+        val barHeight2 = ((rankOp(data.rank2) - rankMin) / rankRatio).toInt().coerceAtLeast(0)
 
         val bar1 = "*".repeat(barHeight1)
         val bar2 = "*".repeat(barHeight2)
