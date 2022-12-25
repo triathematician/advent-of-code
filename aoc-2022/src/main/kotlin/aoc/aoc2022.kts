@@ -24,12 +24,13 @@ Day20: 15:41/21:14 (modulo)
 Day21: 4:28/16:15 (arithmetic tree)
 Day22: 19:04/74:31 (walking around a cube)
 Day23: 21:46/24:43 (moving in a grid)
-Day24: 
-Day25: 
+Day24: 21:08/26:48 (moving in a grid)
+Day25: 7:54/8:30 (mod number representation)
 """.trimIndent()
 
 val personalstats = """
 Day       Time    Rank  Score       Time    Rank  Score
+ 25   09:30:16    8628      0   09:30:35    5935      0
  24   08:35:45    5670      0   09:04:15    5520      0
  23   07:48:57    6995      0   07:54:11    6742      0
  22   07:13:52    7229      0   08:52:41    3217      0
