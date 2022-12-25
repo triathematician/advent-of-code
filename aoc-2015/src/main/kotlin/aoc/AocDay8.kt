@@ -1,7 +1,7 @@
 package aoc
 
-class AocDay0: AocDay(0) {
-    companion object { @JvmStatic fun main(args: Array<String>) { AocDay0().run() } }
+class AocDay8: AocDay(0) {
+    companion object { @JvmStatic fun main(args: Array<String>) { AocDay8().run() } }
 
     override val testinput = ""
     override val input = ""

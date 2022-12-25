@@ -1,4 +1,4 @@
 package aoc.util
 
-class Letters {
-}
+val Char.vowel
+    get() = this in "aeiou"

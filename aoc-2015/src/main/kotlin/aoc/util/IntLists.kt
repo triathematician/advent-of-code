@@ -1,5 +1,7 @@
 package aoc.util
 
+fun List<String>.justTheInts() = mapNotNull { it.toIntOrNull() }
+
 fun List<Int>.cusum() = mutableListOf<Int>().also { res ->
     var sum = 0
     forEach {

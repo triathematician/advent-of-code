@@ -1,6 +1,6 @@
 package aoc
 
-import aoc.util.divideInto
+import aoc.util.splitInto
 import aoc.util.parsePath
 import aoc.util.walk
 
@@ -13,5 +13,5 @@ class AocDay3: AocDay(3) {
     override fun calc1(input: String) = input.parsePath()
         .walk().toSet().size
     override fun calc2(input: String) = input.parsePath()
-        .divideInto(2).flatMap { it.walk().toSet() }.toSet().size
+        .splitInto(2).flatMap { it.walk().toSet() }.toSet().size
 }

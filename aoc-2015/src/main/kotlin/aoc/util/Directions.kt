@@ -1,7 +1,7 @@
 package aoc.util
 
-data class Loc2(val x: Int = 0, val y: Int = 0) {
-    operator fun plus(dir: Compass) = Loc2(x + dir.dx, y + dir.dy)
+data class Loc(val x: Int = 0, val y: Int = 0) {
+    operator fun plus(dir: Compass) = Loc(x + dir.dx, y + dir.dy)
 }
 
 data class Loc2Dir(val x: Int, val y: Int, val dir: Compass)
@@ -17,7 +17,7 @@ enum class Compass(val c: Char, val dx: Int, val dy: Int) {
 
 fun String.parsePath() = map { c -> Compass.values().first { it.c == c }}
 
-fun List<Compass>.walk(from: Loc2 = Loc2()): List<Loc2> {
+fun List<Compass>.walk(from: Loc = Loc()): List<Loc> {
     var p = from
     val path = mutableListOf(p)
     forEach { dir ->

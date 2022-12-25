@@ -1,4 +1,3 @@
 package aoc.util
 
-class ParseStuff {
-}
+fun String.parseInts() = split(' ', ',').mapNotNull { it.toIntOrNull() }
