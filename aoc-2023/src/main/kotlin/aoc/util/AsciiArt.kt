@@ -36,7 +36,7 @@ fun printChristmasTree() {
     println(" ".repeat(10) + ANSI_YELLOW + "|||" + ANSI_RESET)
 }
 
-private fun printSnowScene() {
+fun printSnowScene() {
     val array = Array(6) { Array(40) { " " } }
     val treeLocs = (1..6).map { (1..35).random() }
     treeLocs.forEach {

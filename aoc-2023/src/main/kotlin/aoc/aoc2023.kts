@@ -1,5 +1,7 @@
-import aoc.randomBlueWhite
-import aoc.util.*
+import aoc.util.ANSI_LIGHTBLUE
+import aoc.util.ANSI_RESET
+import aoc.util.ANSI_WHITE
+import aoc.util.randomBlueWhite
 import java.io.File
 import java.time.LocalDate
 import java.time.Month

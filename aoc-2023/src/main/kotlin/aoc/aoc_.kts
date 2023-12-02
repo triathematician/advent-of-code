@@ -1,30 +1,26 @@
 import aoc.AocParser.Companion.parselines
-import aoc.AocRunner
-import aoc.aocInput
-import aoc.print
-
-val day = 0
+import aoc.*
 
 val testInput = """
 
 """.parselines
 
-val input = aocInput(day).parselines
-
-// test case
-
-val testResult = 0
-val testResult2 = 0
-
 // part 1
 
-val answer1 = 0
-answer1.print
+fun List<String>.part1(): Int = 0
 
 // part 2
 
-val answer2 = 0
-answer2.print
+fun List<String>.part2() = 0
+
+// calculate answers
+
+val day = 0
+val input = aocInput(day).parselines
+val testResult = testInput.part1()
+val testResult2 = testInput.part2()
+val answer1 = input.part1().also { it.print }
+val answer2 = input.part2().also { it.print }
 
 // print results
 

@@ -34,7 +34,7 @@ class AocRunner(
 
         if (infoResult.isNotEmpty()) {
             printBreak()
-            infoResult.forEach { println("${ANSI_WHITE}$it") }
+            infoResult.forEach { println("$ANSI_WHITE$it") }
         }
 
         if (testResult != null) {
@@ -52,45 +52,5 @@ class AocRunner(
         println("${ANSI_WHITE}Answer: $ANSI_LIGHTBLUE${part2()}")
 
         printBreak()
-    }
-
-    private fun printChristmasTree() {
-        (0..6).forEach {
-            println((" ".repeat(11 - it) + "*".repeat(it*2+1)).alternateRedGreen())
-        }
-        println(" ".repeat(10) + ANSI_YELLOW + "|||" + ANSI_RESET)
-    }
-
-    private fun printSnowScene() {
-        val array = Array(6) { Array(40) { " " } }
-        val treeLocs = (1..6).map { (1..35).random() }
-        treeLocs.forEach {
-            val ht = listOf(1,2,2,3,3,3).random()
-            array[ht][it] = "$ANSI_GREEN/"
-            array[ht][it+1] = "$ANSI_GREEN\\"
-            array[ht+1][it-1] = "$ANSI_GREEN/"
-            array[ht+1][it] = "${ANSI_GREEN}_"
-            array[ht+1][it+1] = "${ANSI_GREEN}_"
-            array[ht+1][it+2] = "$ANSI_GREEN\\"
-            array[ht+2][it] = "$ANSI_BROWN|"
-            array[ht+2][it+1] = "$ANSI_BROWN|"
-        }
-
-        (0..5).onEach { line ->
-            (0..39).forEach {
-                val ch = array[line][it]
-                if (ch == " ") {
-                    array[line][it] = when ((0..1).random()) {
-                        0 -> ANSI_LIGHTBLUE
-                        else -> ANSI_WHITE
-                    } + when ((0..9).random()) {
-                        in 0..1 -> "*"
-                        in 2..3 -> "."
-                        else -> " "
-                    }
-                }
-            }
-        }
-        array.forEach { println(it.joinToString("")) }
     }
 }

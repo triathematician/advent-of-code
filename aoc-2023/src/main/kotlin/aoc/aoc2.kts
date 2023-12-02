@@ -1,7 +1,5 @@
 import aoc.AocParser.Companion.parselines
-import aoc.AocRunner
-import aoc.aocInput
-import aoc.print
+import aoc.*
 
 val day = 2
 
@@ -13,15 +11,14 @@ Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
 Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 """.parselines
 
-typealias ColorBin = Pair<Int, String>
 class GameResult(var red: Int, var green: Int, var blue: Int)
 
 val input = aocInput(day).parselines
 
 fun List<String>.parseInput() = associate {
     val (game, colors) = it.split(": ")
-    val gameNum = game.substringAfter("Game ").toInt()
-    val colorBins = colors.split(";").map {
+    val gameNum = game.chunkint(1)
+    val colorBins = colors.splitOn(";") {
         val res = GameResult(0, 0, 0)
         it.split(",").map {
             val (n, col) = it.trim().split(" ")
@@ -38,34 +35,28 @@ fun List<String>.parseInput() = associate {
 
 // test case
 
-val testResult = testInput.parseInput().filter {
-    it.value.all {
-        it.red <= 12 && it.green <= 13 && it.blue <= 14
-    }
-}.keys.sum()
-val testResult2 = testInput.parseInput().map {
-    (it.value.maxOf { it.red }) *
-    (it.value.maxOf { it.green }) *
-    (it.value.maxOf { it.blue })
-}.sum()
+val testResult = testInput.part1()
+val testResult2 = testInput.part2()
 
 // part 1
 
-val answer1 = input.parseInput().filter {
+fun List<String>.part1() = parseInput().filter {
     it.value.all {
         it.red <= 12 && it.green <= 13 && it.blue <= 14
     }
 }.keys.sum()
-answer1.print
+
+val answer1 = input.part1().also { it.print }
 
 // part 2
 
-val answer2 = input.parseInput().map {
+fun List<String>.part2() = parseInput().map {
     (it.value.maxOf { it.red }) *
     (it.value.maxOf { it.green }) *
     (it.value.maxOf { it.blue })
 }.sum()
-answer2.print
+
+val answer2 = input.part2().also { it.print }
 
 // print results
 

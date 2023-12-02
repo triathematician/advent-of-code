@@ -1,8 +1,6 @@
 package aoc
 
-import aoc.util.*
 import com.fasterxml.jackson.databind.ObjectMapper
-import kotlin.random.Random
 
 //region TYPE HELPERS
 
@@ -10,7 +8,13 @@ typealias PairChar = Pair<Char, Char>
 
 //endregion
 
-//region INPUT
+//region USEFUL CONSTANTS
+
+val digits = listOf("one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
+
+//endregion
+
+//region INPUT PARSING
 
 fun aocInput(day: Int): String {
     // TODO("Get input from AOC site")
@@ -25,33 +29,6 @@ val Any?.print: Unit
     get() {
         println(this)
     }
-
-fun String.alternateRedGreen() = toCharArray().toList().chunked(2).joinToString("") {
-    "${ANSI_RED}${it[0]}" + (if (it.size == 2) "${ANSI_GREEN}${it[1]}" else "")
-}
-
-fun String.alternateBlueWhite() = toCharArray().toList().chunked(2).joinToString("") {
-    "${ANSI_LIGHTBLUE}${it[0]}" + (if (it.size == 2) "${ANSI_WHITE}${it[1]}" else "")
-}
-
-fun String.randomBlueWhite() = toCharArray().toList().chunked(2).joinToString("") {
-    val ansi1 = if (Random.nextBoolean()) ANSI_LIGHTBLUE else ANSI_WHITE
-    val ansi2 = if (Random.nextBoolean()) ANSI_LIGHTBLUE else ANSI_WHITE
-    "${ANSI_BOLD}${ansi1}${it[0]}" + (if (it.size == 2) "${ansi2}${it[1]}" else "")
-}
-
-fun alignWord(word: String, blockLength: Int, align: String): String {
-    return when (align.toLowerCase()) {
-        "left" -> String.format("%-${blockLength}s", word)
-        "right" -> String.format("%${blockLength}s", word)
-        "center" -> {
-            val prefix = (blockLength - word.length) / 2
-            val suffix = blockLength - prefix - word.length
-            "${" ".repeat(prefix)}$word${" ".repeat(suffix)}"
-        }
-        else -> word
-    }
-}
 
 //endregion
 
