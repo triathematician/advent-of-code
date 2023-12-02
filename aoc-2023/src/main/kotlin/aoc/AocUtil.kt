@@ -1,9 +1,8 @@
 package aoc
 
-import aoc.util.ANSI_GREEN
-import aoc.util.ANSI_RED
-import aoc.util.ANSI_RESET
+import aoc.util.*
 import com.fasterxml.jackson.databind.ObjectMapper
+import kotlin.random.Random
 
 //region TYPE HELPERS
 
@@ -29,7 +28,17 @@ val Any?.print: Unit
 
 fun String.alternateRedGreen() = toCharArray().toList().chunked(2).joinToString("") {
     "${ANSI_RED}${it[0]}" + (if (it.size == 2) "${ANSI_GREEN}${it[1]}" else "")
-} + ANSI_RESET
+}
+
+fun String.alternateBlueWhite() = toCharArray().toList().chunked(2).joinToString("") {
+    "${ANSI_LIGHTBLUE}${it[0]}" + (if (it.size == 2) "${ANSI_WHITE}${it[1]}" else "")
+}
+
+fun String.randomBlueWhite() = toCharArray().toList().chunked(2).joinToString("") {
+    val ansi1 = if (Random.nextBoolean()) ANSI_LIGHTBLUE else ANSI_WHITE
+    val ansi2 = if (Random.nextBoolean()) ANSI_LIGHTBLUE else ANSI_WHITE
+    "${ANSI_BOLD}${ansi1}${it[0]}" + (if (it.size == 2) "${ansi2}${it[1]}" else "")
+}
 
 fun alignWord(word: String, blockLength: Int, align: String): String {
     return when (align.toLowerCase()) {

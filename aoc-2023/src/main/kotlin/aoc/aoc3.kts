@@ -3,7 +3,7 @@ import aoc.AocRunner
 import aoc.aocInput
 import aoc.print
 
-val day = 0
+val day = 3
 
 val testInput = """
 

@@ -1,11 +1,18 @@
+import aoc.randomBlueWhite
 import aoc.util.*
+import java.io.File
+import java.time.LocalDate
+import java.time.Month
 
 val leaders = """
+Day1: 0:12/2:24 (extracting digits)
+Day2: 0:37/1:34 (parsing input)
 """.trimIndent()
 
 val personalstats = """
 Day       Time   Rank  Score       Time   Rank  Score
   1   07:36:34  61695      0   07:36:39  37712      0
+  2   07:06:01  44750      0   07:08:30  41246      0
 """.trimIndent().lines().drop(1).map {
     val columns = it.trim().split("\\s+".toRegex())
     Data(columns[0].toInt(), columns[1], columns[2].toInt(), columns[4], columns[5].toInt())
@@ -13,14 +20,41 @@ Day       Time   Rank  Score       Time   Rank  Score
 
 personalstats.printChart()
 
-println("\n---Rank 1---")
+fun printHeader(str: String) {
+    println("\n---${str}---".randomBlueWhite() + ANSI_RESET)
+}
+
+printHeader("Part 1")
 personalstats.map { it.rank }.sorted().printSummary()
 
-println("\n---Rank 2---")
+printHeader("Part 2")
 personalstats.map { it.rank2 }.sorted().printSummary()
 
-println("\n---Rank Improvement---")
+printHeader("Rank Improvement between Parts")
 personalstats.map { it.rank2 - it.rank }.sorted().printSummary()
+
+printHeader("Updating Files")
+val rootPath = File(File("").absolutePath.substringBeforeLast("aoc-2023")+"aoc-2023")
+val codePath = File(rootPath, "src/main/kotlin/aoc/")
+val inputPath = File(rootPath, "src/main/resources/aoc/input/")
+val day = LocalDate.now().let {
+    if (it.year == 2023 && it.month == Month.DECEMBER) minOf(it.dayOfMonth + 1, 25) else -1
+}
+if (day != -1) {
+    val codeTemplate = File(codePath, "aoc_.kts").readText().replace("day = 0", "day = $day")
+    val inputCode = File(codePath, "aoc$day.kts")
+    if (!inputCode.exists()) {
+        inputCode.writeText(codeTemplate)
+        println("Created file ${inputCode.name}")
+    }
+    val inputFile = File(inputPath, "aoc$day.txt")
+    if (!inputFile.exists()) {
+        inputFile.writeText("")
+        println("Created file ${inputFile.name}")
+    }
+}
+
+//region UTILS
 
 fun List<Int>.printSummary() {
     println("Best rank: ${first()}")
@@ -51,9 +85,10 @@ fun List<Data>.printChart() {
         val line = "%-3s | %${chartHeight + 9}s | %-${chartHeight + 9}s |".format(data.day,
             "[${data.rank}] $bar1",
             "$bar2 [${data.rank2}]"
-        )   .replace("[", "$ANSI_WHITE[")
+        )
+            .replace("[", "$ANSI_WHITE[")
             .replace("]", "]$ANSI_RESET")
-            .replace("**", "$ANSI_RED*$ANSI_GREEN*")
+            .replace("**", "$ANSI_LIGHTBLUE*$ANSI_WHITE*")
             .replace("* |", "*$ANSI_RESET |")
         println(line)
     }
@@ -66,3 +101,5 @@ data class Data(
     val time2: String,
     val rank2: Int
 )
+
+//endregion

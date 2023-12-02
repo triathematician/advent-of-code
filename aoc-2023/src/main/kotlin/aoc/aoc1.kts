@@ -29,7 +29,7 @@ fun String.firstAndLastDigit(): Int {
     return firstDig * 10 + lastDig
 }
 
-AocRunner(1, info = "Leaderboard: , Answers: ",
+AocRunner(1,
     part1 = sum1,
     part2 = sum2
 ).run()
