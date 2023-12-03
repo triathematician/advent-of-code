@@ -16,7 +16,7 @@ fun List<String>.part2() = 0
 
 // calculate answers
 
-val day = 0
+val day = 4
 val input = getDayInput(day, 2023)
 val testResult = testInput.part1()
 val testResult2 = testInput.part2()

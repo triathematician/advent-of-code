@@ -9,12 +9,14 @@ import java.time.Month
 val leaders = """
 Day1: 0:12/2:24 (extracting digits)
 Day2: 0:37/1:34 (parsing input)
+Day3: 3:11/5:09 (grid numbers/symbols)
 """.trimIndent()
 
 val personalstats = """
 Day       Time   Rank  Score       Time   Rank  Score
-  1   07:36:34  61695      0   07:36:39  37712      0
+  3   05:52:13  27871      0   05:56:34  21730      0
   2   07:06:01  44750      0   07:08:30  41246      0
+  1   07:36:34  61695      0   07:36:39  37712      0
 """.trimIndent().lines().drop(1).map {
     val columns = it.trim().split("\\s+".toRegex())
     Data(columns[0].toInt(), columns[1], columns[2].toInt(), columns[4], columns[5].toInt())

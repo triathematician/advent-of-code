@@ -1,7 +1,15 @@
 package aoc.util
 
+import kotlin.math.absoluteValue
+
 data class Loc(val x: Int = 0, val y: Int = 0) {
     operator fun plus(dir: Compass) = Loc(x + dir.dx, y + dir.dy)
+    fun plus(x: Int, y: Int) = Loc(this.x + x, this.y + y)
+    fun adjacentTo(loc: Loc, diagonal: Boolean) = when {
+        diagonal -> (loc.x - x).absoluteValue <= 1 && (loc.y - y).absoluteValue <= 1
+        else -> (loc.x == x && (loc.y - y).absoluteValue <= 1) ||
+                (loc.y == y && (loc.x - x).absoluteValue <= 1)
+    }
 }
 
 data class Loc2Dir(val x: Int, val y: Int, val dir: Compass)

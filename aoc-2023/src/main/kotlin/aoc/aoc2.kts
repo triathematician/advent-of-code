@@ -1,5 +1,6 @@
 import aoc.AocParser.Companion.parselines
 import aoc.*
+import aoc.util.getDayInput
 
 val day = 2
 
@@ -13,7 +14,7 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 
 class GameResult(var red: Int, var green: Int, var blue: Int)
 
-val input = aocInput(day).parselines
+val input = getDayInput(day, 2023)
 
 fun List<String>.parseInput() = associate {
     val (game, colors) = it.split(": ")

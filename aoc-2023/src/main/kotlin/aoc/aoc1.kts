@@ -1,13 +1,13 @@
 import aoc.AocRunner
-import aoc.aocInput
+import aoc.util.getDayInput
 
-val input = aocInput(1)
+val input = getDayInput(1, 2023)
 val digits = listOf("one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
 
-val sum1 = input.lines()
+val sum1 = input
     .sumOf { it.first { it.isDigit() }.digitToInt() * 10 + it.last { it.isDigit() }.digitToInt() }
 
-val sum2 = input.lines().sumOf { it.firstAndLastDigit() }
+val sum2 = input.sumOf { it.firstAndLastDigit() }
 
 fun String.digitAt(index: Int) = digits.indexOfFirst { substring(index).startsWith(it) } + 1
 

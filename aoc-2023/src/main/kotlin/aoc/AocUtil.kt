@@ -14,15 +14,6 @@ val digits = listOf("one", "two", "three", "four", "five", "six", "seven", "eigh
 
 //endregion
 
-//region INPUT PARSING
-
-fun aocInput(day: Int): String {
-    // TODO("Get input from AOC site")
-    return AocRunner::class.java.getResource("input/aoc$day.txt")!!.readText()
-}
-
-//endregion
-
 //region PRINTING
 
 val Any?.print: Unit
