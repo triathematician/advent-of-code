@@ -1,7 +1,6 @@
 import aoc.AocParser.Companion.parselines
 import aoc.*
-import aoc.util.Loc
-import aoc.util.getDayInput
+import aoc.util.*
 
 val testInput = """
 467..114..
@@ -16,37 +15,24 @@ val testInput = """
 .664.598..
 """.parselines
 
-fun List<String>.grid() = map { it.toList() }
+fun CharGrid.symbols() = findCoords2 { it != '.' && !it.isDigit() }
 
-fun List<List<Char>>.symbols() = indices.flatMap { y ->
-    this[y].indices.flatMap { x ->
-        val c = this[y][x]
-        if (c != '.' && !c.isDigit())
-            listOf(c to Loc(x, y))
-        else
-            emptyList()
-    }
-}.groupBy { it.first }.mapValues { it.value.map { it.second } }
-
-fun Map<Char, List<Loc>>.symbolLocs() = entries.flatMap { it.value }
-
-fun List<List<Char>>.numLocs() = indices.flatMap { y ->
+fun CharGrid.numLocs() = indices.flatMap { y ->
     val search = "[0-9]+".toRegex()
-    search.findAll(this[y].joinToString("")).map {
-        it.value.toInt() to Loc(it.range.first, y)
+    search.findAll(this[y]).map {
+        it.value.toInt() to Coord(it.range.first, y)
     }
 }
 
 // part 1
 
 fun List<String>.part1(): Int {
-    val grid = grid()
-    val nums = grid().numLocs()
-    val symbols = grid.symbols().symbolLocs()
+    val nums = numLocs()
+    val symbolLocs = symbols().flatMap { it.value }
     return nums.filter {
         (1..it.first.toString().length).any { i ->
             val testLoc = it.second.plus(i - 1, 0)
-            symbols.any { it.adjacentTo(testLoc, diagonal = true) }
+            symbolLocs.any { it.adjacentTo(testLoc, diagonal = true) }
         }
     }.sumOf { it.first }
 }
@@ -54,9 +40,8 @@ fun List<String>.part1(): Int {
 // part 2
 
 fun List<String>.part2(): Int {
-    val grid = grid()
-    val nums = grid().numLocs()
-    val symbols = grid.symbols()['*']!!
+    val nums = numLocs()
+    val symbols = symbols()['*']!!
     return symbols.sumOf { loc ->
         val numsAdj = nums.filter {
             (1..it.first.toString().length).any { i ->

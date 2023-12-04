@@ -7,13 +7,15 @@ import java.time.LocalDate
 import java.time.Month
 
 val leaders = """
-Day1: 0:12/2:24 (extracting digits)
-Day2: 0:37/1:34 (parsing input)
+Day4: 0:43/1:22 (winning numbers)
 Day3: 3:11/5:09 (grid numbers/symbols)
+Day2: 0:37/1:34 (parsing input)
+Day1: 0:12/2:24 (extracting digits)
 """.trimIndent()
 
 val personalstats = """
 Day       Time   Rank  Score       Time   Rank  Score
+  4   07:19:24  47716      0   07:30:24  37456      0
   3   05:52:13  27871      0   05:56:34  21730      0
   2   07:06:01  44750      0   07:08:30  41246      0
   1   07:36:34  61695      0   07:36:39  37712      0
@@ -50,11 +52,6 @@ if (day != -1) {
     if (!inputCode.exists()) {
         inputCode.writeText(codeTemplate)
         println("Created file ${inputCode.name}")
-    }
-    val inputFile = File(inputPath, "aoc$day.txt")
-    if (!inputFile.exists()) {
-        inputFile.writeText("")
-        println("Created file ${inputFile.name}")
     }
 }
 
