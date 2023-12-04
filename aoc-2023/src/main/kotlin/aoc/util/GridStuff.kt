@@ -2,7 +2,7 @@ package aoc.util
 
 import kotlin.math.absoluteValue
 
-// assume this is a list of rows, so y is first
+// assume grids are all arranged by row first, so getting values out requires getting the y value first
 
 //region [Loc] methods
 
@@ -28,10 +28,10 @@ fun intgrid(xsize: Int, ysize: Int) = grid(xsize, ysize) { 0 }
 //region get values in grids
 
 fun <X> List<List<X>>.allIndices() =
-    indices.flatMap { i -> get(i).indices.map { i to it }}
+    indices.flatMap { y -> get(y).indices.map { x -> x to y }}
 
 fun CharGrid.allIndices2() =
-    indices.flatMap { i -> get(i).indices.map { i to it }}
+    indices.flatMap { y -> get(y).indices.map { x -> x to y }}
 
 val CharGrid.xrange
     get() = get(0).indices
@@ -41,8 +41,8 @@ val CharGrid.yrange
 fun CharGrid.at(c: Coord) = get(c.y).get(c.x)
 fun CharGrid.get(x: Int, y: Int) = get(y).get(x)
 
-operator fun <X> List<List<X>>.get(coord: Coord) = this[coord.first][coord.second]
-operator fun List<String>.get(coord: Coord) = this[coord.first][coord.second]
+operator fun <X> List<List<X>>.get(coord: Coord) = this[coord.second][coord.first]
+operator fun List<String>.get(coord: Coord) = this[coord.second][coord.first]
 
 //endregion
 
