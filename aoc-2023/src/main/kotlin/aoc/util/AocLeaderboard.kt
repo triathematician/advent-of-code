@@ -89,7 +89,7 @@ private fun printStars(year: Int, day: Int, info: List<AocDay>) {
             val tot = totBins[it] ?: 0
             when (line) {
                 in (p1 + 1..tot) -> print("$ANSI_BRIGHT_YELLOW*$ANSI_RESET")
-                in (1..p1) -> print("$ANSI_GRAY*$ANSI_RESET")
+                in (1..p1) -> print("$ANSI_GRAY•$ANSI_RESET")
                 else -> print(" ")
             }
         }
@@ -99,7 +99,7 @@ private fun printStars(year: Int, day: Int, info: List<AocDay>) {
             val tot = totBins[it] ?: 0
             when (line) {
                 in (p1 + 1..tot) -> print("$ANSI_BRIGHT_YELLOW*$ANSI_RESET")
-                in (1..p1) -> print("$ANSI_GRAY*$ANSI_RESET")
+                in (1..p1) -> print("$ANSI_GRAY•$ANSI_RESET")
                 else -> print(" ")
             }
         }
