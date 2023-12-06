@@ -7,6 +7,7 @@ import java.time.LocalDate
 import java.time.Month
 
 val leaders = """
+Day5: 1:15/2:05 (quadratic boats)
 Day5: 1:35/8:38 (mapping ranges)
 Day4: 0:43/1:22 (winning numbers)
 Day3: 3:11/5:09 (grid numbers/symbols)
@@ -16,6 +17,7 @@ Day1: 0:12/2:24 (extracting digits)
 
 val personalstats = """
 Day       Time   Rank  Score       Time   Rank  Score
+  6   06:25:54  36207      0   06:30:27  34923      0
   5   06:42:10  30775      0   07:15:42  14406      0
   4   07:19:24  47716      0   07:30:24  37456      0
   3   05:52:13  27871      0   05:56:34  21730      0

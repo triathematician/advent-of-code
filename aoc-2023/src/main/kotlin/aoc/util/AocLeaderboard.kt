@@ -52,7 +52,9 @@ fun main() {
         .groupBy { it.key }
         .mapValues { it.value.map { it.value } }
     days.keys.map { it.toInt() }.sorted().forEach {
-        printStars(2023, it, days[it.toString()]!!)
+        val userBin = leaderboard.members["2651623"]!!
+            .completion_day_level[it.toString()]!!
+        printStars(2023, it, days[it.toString()]!!, userBin)
     }
 }
 
@@ -74,8 +76,24 @@ private fun binStar(date: LocalDate, ts: Long): Int {
 
 private fun List<Int>.eachCount() = groupBy { it }.mapValues { it.value.size }
 
-private fun printStars(year: Int, day: Int, info: List<AocDay>) {
+private fun printStar(line: Int, p1: Int, tot: Int, user1: Boolean, user2: Boolean) {
+    when {
+        line == p1+1 && user2 ->
+            print("$ANSI_BRIGHT_GREEN*$ANSI_RESET")
+        line in (p1 + 1..tot) ->
+            print("$ANSI_BRIGHT_YELLOW*$ANSI_RESET")
+        line == 1 && user1 ->
+            print("$ANSI_BRIGHT_GREEN•$ANSI_RESET")
+        line in (1..p1) ->
+            print("$ANSI_GRAY•$ANSI_RESET")
+        else -> print(" ")
+    }
+}
+
+private fun printStars(year: Int, day: Int, info: List<AocDay>, userBin: AocDay) {
     val date = LocalDate.of(year, Month.DECEMBER, day)
+    val userBin1 = binStar(date, userBin.puzzle1Ts)
+    val userBin2 = userBin.puzzle2Ts?.let { binStar(date, it) }
     val p1Stars = info.map { it.puzzle1Ts }.map { binStar(date, it) }
     val p2Stars = info.mapNotNull { it.puzzle2Ts }.map { binStar(date, it) }
     val p1Bins = p1Stars.eachCount()
@@ -85,23 +103,13 @@ private fun printStars(year: Int, day: Int, info: List<AocDay>) {
     (1..maxCount).forEach {
         val line = maxCount - it + 1
         (0 until BIN_COUNT).forEach {
-            val p1 = p1Bins[it] ?: 0
-            val tot = totBins[it] ?: 0
-            when (line) {
-                in (p1 + 1..tot) -> print("$ANSI_BRIGHT_YELLOW*$ANSI_RESET")
-                in (1..p1) -> print("$ANSI_GRAY•$ANSI_RESET")
-                else -> print(" ")
-            }
+            printStar(line, p1Bins[it] ?: 0, totBins[it] ?: 0,
+                userBin1 == it, userBin2 == it)
         }
         print("|")
         (BIN_COUNT+1..BIN_COUNT+7).forEach {
-            val p1 = p1Bins[it] ?: 0
-            val tot = totBins[it] ?: 0
-            when (line) {
-                in (p1 + 1..tot) -> print("$ANSI_BRIGHT_YELLOW*$ANSI_RESET")
-                in (1..p1) -> print("$ANSI_GRAY•$ANSI_RESET")
-                else -> print(" ")
-            }
+            printStar(line, p2Bins[it] ?: 0, totBins[it] ?: 0,
+                userBin1 == it, userBin2 == it)
         }
         println()
     }

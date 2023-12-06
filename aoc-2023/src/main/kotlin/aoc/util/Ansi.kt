@@ -17,6 +17,7 @@ const val ANSI_GRAY = "\u001B[37m"
 
 const val ANSI_BROWN = "\u001B[33m"
 
+const val ANSI_BRIGHT_GREEN = "\u001B[92m"
 const val ANSI_BRIGHT_YELLOW = "\u001B[93m"
 const val ANSI_LIGHTBLUE = "\u001B[94m"
 const val ANSI_WHITE = "\u001B[97m"
