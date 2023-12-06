@@ -26,7 +26,8 @@ fun getDayInput(day: Int, year: Int): List<String> {
             println("Downloaded input for Dec $day $year")
         }
     }
-    return input.readText().trim().lines()
+    val lines = input.readText().trim().lines()
+    return if (lines.last().isEmpty()) lines.dropLast(1) else lines
 }
 
 private fun rootDir(year: Int): File {
