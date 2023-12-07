@@ -8,7 +8,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import java.time.LocalDate
 import java.time.Month
 import java.time.ZoneId
-import java.time.ZoneOffset
 
 /** Parses leaderboard.json */
 class AocLeaderboard(
