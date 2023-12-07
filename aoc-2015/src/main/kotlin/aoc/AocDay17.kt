@@ -22,12 +22,12 @@ class AocDay17: AocDay(17) {
         }
     }
 
-    override fun calc1(input: List<String>): Int? {
+    override fun calc1(input: List<String>): Int {
         val target = if (input.size == 5) 25 else 150
         val nums = input.map { it.toInt() }
         return count(nums, target)!!.count()
     }
-    override fun calc2(input: List<String>): Int? {
+    override fun calc2(input: List<String>): Int {
         val target = if (input.size == 5) 25 else 150
         val nums = input.map { it.toInt() }
         val sets = count(nums, target)!!
