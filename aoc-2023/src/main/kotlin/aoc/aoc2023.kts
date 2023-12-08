@@ -7,17 +7,20 @@ import java.time.LocalDate
 import java.time.Month
 
 val leaders = """
-Day7: 4:52/8:45 (poker hands)
-Day6: 1:15/2:05 (quadratic boats)
-Day5: 1:35/8:38 (mapping ranges)
-Day4: 0:43/1:22 (winning numbers)
-Day3: 3:11/5:09 (grid numbers/symbols)
-Day2: 0:37/1:34 (parsing input)
-Day1: 0:12/2:24 (extracting digits)
+--100th Best Times for Each Puzzle--
+Day8: 3:30/10:16 (lcm's)
+Day7: 9:57/16:00 (poker hands)
+Day6: 3:11/5:02 (quadratic boats)
+Day5: 8:15/26:37 (mapping ranges)
+Day4: 2:51/7:08 (winning numbers)
+Day3: 7:09/11:37 (grid numbers/symbols)
+Day2: 4:10/6:15 (parsing input)
+Day1: 1:39/7:03 (extracting digits)
 """.trimIndent()
 
 val personalstats = """
 Day       Time   Rank  Score       Time   Rank  Score
+  8   05:15:02  29264      0   05:23:24  18001      0
   7   06:00:31  25809      0   06:16:35  20651      0
   6   06:25:54  36207      0   06:30:27  34923      0
   5   06:42:10  30775      0   07:15:42  14406      0
