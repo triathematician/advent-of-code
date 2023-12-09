@@ -12,11 +12,13 @@ import kotlin.math.ceil
 
 fun main() {
     getLeaderboards()
-    printLeaderboard("leaderboard.json", highlight = "2651623")
-    printLeaderboard("leaderboard2.json", highlight = "2651623", reduceFactor = 2)
+    printLeaderboard("leaderboard.json", highlight = "2651623", intervals = true)
+//    printLeaderboard("leaderboard2.json", highlight = "2651623", reduceFactor = 1, intervals = true)
 }
 
-private fun printLeaderboard(jsonFile: String, highlight: String? = null, reduceFactor: Int = 1) {
+private const val BIN_COUNT = 96
+
+private fun printLeaderboard(jsonFile: String, highlight: String? = null, reduceFactor: Int = 1, intervals: Boolean) {
     println("-".repeat(BIN_COUNT + 20) + " Dec 2023")
     val json = AocRunner::class.java.getResource(jsonFile).readText()
     val leaderboard = ObjectMapper()
@@ -27,8 +29,10 @@ private fun printLeaderboard(jsonFile: String, highlight: String? = null, reduce
         .mapValues { it.value.map { it.value } }
     days.keys.map { it.toInt() }.sorted().forEach {
         val userBin = leaderboard.members[highlight]?.completion_day_level?.get(it.toString())
-        printStars(2023, it, days[it.toString()]!!, userBin, reduceFactor)
-        printStarIntervals(2023, it, days[it.toString()]!!, userBin, reduceFactor)
+        if (intervals)
+            printStarIntervals(2023, it, days[it.toString()]!!, userBin, reduceFactor)
+        else
+            printStars(2023, it, days[it.toString()]!!, userBin, reduceFactor)
     }
 }
 
@@ -144,9 +148,9 @@ private fun printStarIntervals(year: Int, day: Int, info: List<AocDay>, userBin:
                     str += "$color⊗$ANSI_RESET"
                 } else if (end == null) {
                     str += if (color == ANSI_BRIGHT_GREEN) {
-                        "$color∘$ANSI_RESET"
+                        "$color◌$ANSI_RESET"
                     } else {
-                        "$ANSI_GRAY∘$ANSI_RESET"
+                        "$ANSI_GRAY◌$ANSI_RESET"
                     }
                 } else {
                     str += if (color == ANSI_BRIGHT_GREEN) {
@@ -195,8 +199,6 @@ private fun printAxis(bins: Int, day: Int, year: Int) {
     print("|  >24h")
     println()
 }
-
-private const val BIN_COUNT = 48
 
 private fun binStar(date: LocalDate, ts: Long): Int {
     val BIN_SECONDS = 24*60*60 / BIN_COUNT

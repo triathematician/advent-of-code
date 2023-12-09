@@ -1,3 +1,4 @@
+import aoc.AocParser.Companion.parse
 import aoc.util.ANSI_LIGHTBLUE
 import aoc.util.ANSI_RESET
 import aoc.util.ANSI_WHITE
@@ -8,6 +9,7 @@ import java.time.Month
 
 val leaders = """
 --100th Best Times for Each Puzzle--
+Day9: 4:02/5:36 (adding number sequences)
 Day8: 3:30/10:16 (lcm's)
 Day7: 9:57/16:00 (poker hands)
 Day6: 3:11/5:02 (quadratic boats)
@@ -19,18 +21,19 @@ Day1: 1:39/7:03 (extracting digits)
 """.trimIndent()
 
 val personalstats = """
-Day       Time   Rank  Score       Time   Rank  Score
-  8   05:15:02  29264      0   05:23:24  18001      0
-  7   06:00:31  25809      0   06:16:35  20651      0
-  6   06:25:54  36207      0   06:30:27  34923      0
-  5   06:42:10  30775      0   07:15:42  14406      0
-  4   07:19:24  47716      0   07:30:24  37456      0
-  3   05:52:13  27871      0   05:56:34  21730      0
-  2   07:06:01  44750      0   07:08:30  41246      0
-  1   07:36:34  61695      0   07:36:39  37712      0
+Day       Time   Rank  Score       Time   Rank  Score InputFile
+  9   06:57:31  27348      0   07:04:31  26444      0   6:48:20
+  8   05:15:02  29264      0   05:23:24  18001      0   5:08:53
+  7   06:00:31  25809      0   06:16:35  20651      0   5:32:24
+  6   06:25:54  36207      0   06:30:27  34923      0   6:18:54
+  5   06:42:10  30775      0   07:15:42  14406      0   6:21:56
+  4   07:19:24  47716      0   07:30:24  37456      0   7:11:05
+  3   05:52:13  27871      0   05:56:34  21730      0   5:38:09
+  2   07:06:01  44750      0   07:08:30  41246      0   6:56:28
+  1   07:36:34  61695      0   07:36:39  37712      0   7:11:11   #NOTE - times here are off since I switched accounts
 """.trimIndent().lines().drop(1).map {
     val columns = it.trim().split("\\s+".toRegex())
-    Data(columns[0].toInt(), columns[1], columns[2].toInt(), columns[4], columns[5].toInt())
+    Data(columns[0].toInt(), columns[1], columns[2].toInt(), columns[4], columns[5].toInt(), columns[7])
 }
 
 personalstats.printChart()
@@ -39,19 +42,29 @@ fun printHeader(str: String) {
     println("\n---${str}---".randomBlueWhite() + ANSI_RESET)
 }
 
-printHeader("Part 1")
+printHeader("Part 1 Ranks")
 personalstats.map { it.rank }.sorted().printSummary()
 
-printHeader("Part 2")
+printHeader("Part 2 Ranks")
 personalstats.map { it.rank2 }.sorted().printSummary()
 
-printHeader("Rank Improvement between Parts")
-personalstats.map { it.rank2 - it.rank }.sorted().printSummary()
+printHeader("Number of Ranks Dropped")
+// drop 1 invalid time this year
+personalstats.map { it.rank - it.rank2 }.sortedDescending().drop(1).improvementSummary()
+
+printHeader("Time to Solve Part 1")
+personalstats.map { it.timePart1 }.sorted().map { it.hms() }.printSummary()
+
+printHeader("Time to Solve Part 2")
+// drop 1 invalid time this year
+personalstats.map { it.timePart2 }.sorted().drop(1).map { it.hms() }.printSummary()
+
+printHeader("Time to Solve Both")
+personalstats.map { it.timeBoth }.sorted().map { it.hms() }.printSummary()
 
 printHeader("Updating Files")
 val rootPath = File(File("").absolutePath.substringBeforeLast("aoc-2023")+"aoc-2023")
 val codePath = File(rootPath, "src/main/kotlin/aoc/")
-val inputPath = File(rootPath, "src/main/resources/aoc/input/")
 val day = LocalDate.now().let {
     if (it.year == 2023 && it.month == Month.DECEMBER) minOf(it.dayOfMonth + 1, 25) else -1
 }
@@ -66,10 +79,16 @@ if (day != -1) {
 
 //region UTILS
 
-fun List<Int>.printSummary() {
-    println("Best rank: ${first()}")
-    println("Median rank: ${this[size / 2]}")
-    println("Worst rank: ${last()}")
+fun List<*>.printSummary() {
+    println("Best: ${first()}")
+    println("Median: ${this[size / 2]}")
+    println("Worst: ${last()}")
+}
+
+fun List<*>.improvementSummary() {
+    println("Largest drop: ${first()}")
+    println("Median drop: ${this[size / 2]}")
+    println("Lowest drop: ${last()}")
 }
 
 fun List<Data>.printChart() {
@@ -109,7 +128,20 @@ data class Data(
     val time: String,
     val rank: Int,
     val time2: String,
-    val rank2: Int
-)
+    val rank2: Int,
+    val timeFile: String
+) {
+    val timePart1 = time.parseTime() - timeFile.parseTime()
+    val timePart2 = time2.parseTime() - time.parseTime()
+    val timeBoth = timePart1 + timePart2
+
+    private fun String.parseTime() = split(':').map { it.toInt() }.let { (h, m, s) -> h * 3600 + m * 60 + s }
+}
+
+fun Int.hms() = if (this >= 3600) {
+    "%02d:%02d:%02d".format(this / 3600, (this % 3600) / 60, this % 60)
+} else {
+    "%5d:%02d".format(this / 60, this % 60)
+}
 
 //endregion
