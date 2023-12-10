@@ -1,4 +1,3 @@
-import aoc.AocParser.Companion.parse
 import aoc.util.ANSI_LIGHTBLUE
 import aoc.util.ANSI_RESET
 import aoc.util.ANSI_WHITE
@@ -9,6 +8,7 @@ import java.time.Month
 
 val leaders = """
 --100th Best Times for Each Puzzle--
+Day10: 11:33/36:31 (snake maze)
 Day9: 4:02/5:36 (adding number sequences)
 Day8: 3:30/10:16 (lcm's)
 Day7: 9:57/16:00 (poker hands)
@@ -22,6 +22,7 @@ Day1: 1:39/7:03 (extracting digits)
 
 val personalstats = """
 Day       Time   Rank  Score       Time   Rank  Score InputFile
+ 10   05:40:39  16632      0   05:59:14   7738      0   5:28:38
   9   06:57:31  27348      0   07:04:31  26444      0   6:48:20
   8   05:15:02  29264      0   05:23:24  18001      0   5:08:53
   7   06:00:31  25809      0   06:16:35  20651      0   5:32:24
@@ -80,15 +81,15 @@ if (day != -1) {
 //region UTILS
 
 fun List<*>.printSummary() {
-    println("Best: ${first()}")
+    println("Best:   ${first()}")
     println("Median: ${this[size / 2]}")
-    println("Worst: ${last()}")
+    println("Worst:  ${last()}")
 }
 
 fun List<*>.improvementSummary() {
     println("Largest drop: ${first()}")
-    println("Median drop: ${this[size / 2]}")
-    println("Lowest drop: ${last()}")
+    println("Median drop:  ${this[size / 2]}")
+    println("Lowest drop:  ${last()}")
 }
 
 fun List<Data>.printChart() {

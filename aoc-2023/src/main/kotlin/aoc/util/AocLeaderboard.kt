@@ -13,7 +13,7 @@ import kotlin.math.ceil
 fun main() {
     getLeaderboards()
     printLeaderboard("leaderboard.json", highlight = "2651623", intervals = true)
-//    printLeaderboard("leaderboard2.json", highlight = "2651623", reduceFactor = 1, intervals = true)
+    printLeaderboard("leaderboard2.json", highlight = "2651623", reduceFactor = 1, intervals = true)
 }
 
 private const val BIN_COUNT = 96
