@@ -50,6 +50,7 @@ class Maze(val grid: List<String>) {
     }
 
     fun insideLoop(loop: Set<Coord>, row: Int): Int {
+        // reduce string to just have | and spaces
         var str = xr.mapNotNull {
             val c = Coord(it, row)
             when {
@@ -63,6 +64,7 @@ class Maze(val grid: List<String>) {
             .replace("LJ", "")
             .replace("FJ", "|")
             .replace("L7", "|")
+        // now use even-odd rule to count parts that are inside the loop
         var res = 0
         var index = 0
         val search = "\\|(\\s*)\\|".toRegex()
