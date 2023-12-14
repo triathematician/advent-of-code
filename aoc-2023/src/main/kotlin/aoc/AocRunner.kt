@@ -20,37 +20,39 @@ class AocRunner(
         info = { listOfNotNull(info) }, part1 = { part1 }, part2 = { part2 }
     )
 
-    fun printBreak() {
-        println("•".repeat(40).alternateBlueWhite())
+    fun printBreak(size: Int) {
+        println("•".repeat(size).alternateBlueWhite())
     }
 
     fun run() {
         val testResult = test()
         val infoResult = info()
 
-        printBreak()
+        val SIZE = 60
+        printBreak(SIZE)
         println(ANSI_BOLD + "       ADVENT OF CODE 2023 DAY ${format("%02d", day)}".alternateBlueWhite())
-        printSnowScene()
+        println()
+        printSnowScene(SIZE)
 
         if (infoResult.isNotEmpty()) {
-            printBreak()
-            infoResult.forEach { println("$ANSI_WHITE$it") }
+            printBreak(SIZE)
+            infoResult.forEach { println("$ANSI_GRAY$it") }
         }
 
         if (testResult != null) {
-            printBreak()
-            println("${ANSI_WHITE}Test code")
-            println("${ANSI_WHITE}Answer: $ANSI_LIGHTBLUE${test()}")
+            printBreak(SIZE)
+            println("${ANSI_GRAY}Test Case")
+            println("${ANSI_GRAY}Answer(s): $ANSI_BLUE${test()}")
         }
 
-        printBreak()
+        printBreak(SIZE)
         println("${ANSI_WHITE}Part 1")
-        println("${ANSI_WHITE}Answer: $ANSI_LIGHTBLUE${part1()}")
+        println("${ANSI_WHITE}Answer: $ANSI_LIGHT_BLUE${part1()}")
 
-        printBreak()
+        printBreak(SIZE)
         println("${ANSI_WHITE}Part 2")
-        println("${ANSI_WHITE}Answer: $ANSI_LIGHTBLUE${part2()}")
+        println("${ANSI_WHITE}Answer: $ANSI_LIGHT_BLUE${part2()}")
 
-        printBreak()
+        printBreak(SIZE)
     }
 }

@@ -7,12 +7,12 @@ fun String.alternateRedGreen() = toCharArray().toList().chunked(2).joinToString(
 }
 
 fun String.alternateBlueWhite() = toCharArray().toList().chunked(2).joinToString("") {
-    "$ANSI_LIGHTBLUE${it[0]}" + (if (it.size == 2) "$ANSI_WHITE${it[1]}" else "")
+    "$ANSI_LIGHT_BLUE${it[0]}" + (if (it.size == 2) "$ANSI_WHITE${it[1]}" else "")
 }
 
 fun String.randomBlueWhite() = toCharArray().toList().chunked(2).joinToString("") {
-    val ansi1 = if (Random.nextBoolean()) ANSI_LIGHTBLUE else ANSI_WHITE
-    val ansi2 = if (Random.nextBoolean()) ANSI_LIGHTBLUE else ANSI_WHITE
+    val ansi1 = if (Random.nextBoolean()) ANSI_LIGHT_BLUE else ANSI_WHITE
+    val ansi2 = if (Random.nextBoolean()) ANSI_LIGHT_BLUE else ANSI_WHITE
     "$ANSI_BOLD${ansi1}${it[0]}" + (if (it.size == 2) "${ansi2}${it[1]}" else "")
 }
 
@@ -36,35 +36,47 @@ fun printChristmasTree() {
     println(" ".repeat(10) + ANSI_YELLOW + "|||" + ANSI_RESET)
 }
 
-fun printSnowScene() {
-    val array = Array(6) { Array(40) { " " } }
-    val treeLocs = (1..6).map { (1..35).random() }
+fun printSnowScene(size: Int) {
+    val rows = 7
+    val trees = 8
+    val array = Array(rows) { Array(size) { " " } }
+    val treeLocs = (1..trees).map { (1..size-5).random() }
     treeLocs.forEach {
         val ht = listOf(1,2,2,3,3,3).random()
         array[ht][it] = "$ANSI_GREEN/"
-        array[ht][it+1] = "$ANSI_GREEN\\"
+        array[ht][it+1] = "\\"
         array[ht+1][it-1] = "$ANSI_GREEN/"
-        array[ht+1][it] = "${ANSI_GREEN}_"
-        array[ht+1][it+1] = "${ANSI_GREEN}_"
-        array[ht+1][it+2] = "$ANSI_GREEN\\"
-        array[ht+2][it] = "$ANSI_BROWN|"
-        array[ht+2][it+1] = "$ANSI_BROWN|"
+        array[ht+1][it] = "_"
+        array[ht+1][it+1] = "_"
+        array[ht+1][it+2] = "\\"
+        array[ht+2][it] = "$ANSI_BROWN¦"
+        array[ht+2][it+1] = "¦"
     }
 
-    (0..5).onEach { line ->
-        (0..39).forEach {
+    (0 until rows).onEach { line ->
+        (0 until size).forEach {
             val ch = array[line][it]
             if (ch == " ") {
-                array[line][it] = when ((0..1).random()) {
-                    0 -> ANSI_LIGHTBLUE
-                    else -> ANSI_WHITE
-                } + when ((0..9).random()) {
-                    in 0..1 -> "*"
-                    in 2..3 -> "."
+                val char = when ((0..29).random()) {
+                    in 1..3 -> "*"
+                    in 4..4 -> "¤"
+                    in 5..7 -> "•" // "❉❄"
+                    in 8..11 -> "·"
                     else -> " "
                 }
+                val col = if (char == " ") "" else when ((0..4).random()) {
+                    0 -> ANSI_LIGHT_BLUE
+                    1 -> ANSI_WHITE
+                    2 -> ANSI_LIGHT_CYAN
+                    3 -> ANSI_DARK_CYAN
+                    else -> ANSI_WHITE
+                }
+                array[line][it] = col+char
             }
         }
     }
-    array.forEach { println(it.joinToString("")) }
+    array.forEach {
+        val line = it.joinToString("")
+        println(line.replace("$ANSI_GREEN/\\ ", "$ANSI_GREEN/\\$ANSI_LIGHT_CYAN·"))
+    }
 }

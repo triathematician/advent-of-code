@@ -19,6 +19,7 @@ fun main() {
 private const val BIN_COUNT = 96
 
 private fun printLeaderboard(jsonFile: String, highlight: String? = null, reduceFactor: Int = 1, intervals: Boolean) {
+    println("\n".repeat(3))
     println("-".repeat(BIN_COUNT + 20) + " Dec 2023")
     val json = AocRunner::class.java.getResource(jsonFile).readText()
     val leaderboard = ObjectMapper()
@@ -104,7 +105,7 @@ private fun printStars(year: Int, day: Int, info: List<AocDay>, userBin: AocDay?
                 userBin1 == it, userBin2 == it
             )
         }
-        print("|")
+        print("¦")
         (BIN_COUNT + 1..BIN_COUNT + 7).forEach {
             printStar(
                 line, p0Bins[it] ?: 0, p2Bins[it] ?: 0, p2Bins[it] ?: 0, totBins[it] ?: 0,
@@ -143,20 +144,20 @@ private fun printStarIntervals(year: Int, day: Int, info: List<AocDay>, userBin:
             with (intervals[it]) {
                 str += " ".repeat(start - pos - 1)
                 if (color == ANSI_RESET) {
-                    str += "|"
+                    str += "¦"
                 } else if (start == end) {
                     str += "$color⊗$ANSI_RESET"
                 } else if (end == null) {
                     str += if (color == ANSI_BRIGHT_GREEN) {
-                        "$color◌$ANSI_RESET"
+                        "$ANSI_GREEN◌$ANSI_RESET"
                     } else {
-                        "$ANSI_GRAY◌$ANSI_RESET"
+                        "$ANSI_BROWN◌$ANSI_RESET"
                     }
                 } else {
                     str += if (color == ANSI_BRIGHT_GREEN) {
-                        "$color»"
+                        "$ANSI_DARK_GREEN»"
                     } else {
-                        "$ANSI_GRAY»"
+                        "$ANSI_DARK_BROWN»"
                     }
                     str += "»".repeat(interval.last - start - 1) + color + "*" + ANSI_RESET
                 }

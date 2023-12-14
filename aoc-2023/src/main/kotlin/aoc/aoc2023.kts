@@ -1,4 +1,4 @@
-import aoc.util.ANSI_LIGHTBLUE
+import aoc.util.ANSI_LIGHT_BLUE
 import aoc.util.ANSI_RESET
 import aoc.util.ANSI_WHITE
 import aoc.util.randomBlueWhite
@@ -8,6 +8,7 @@ import java.time.Month
 
 val leaders = """
 --100th Best Times for Each Puzzle--
+Day14: 4:10/17:15 (rock and roll grids) 
 Day13: 8:58/13:46 (reflecting grids)
 Day12: 8:12/22:57 (matching characters)
 Day11: 6:07/9:18 (expanding galaxies)
@@ -25,6 +26,7 @@ Day1: 1:39/7:03 (extracting digits)
 
 val personalstats = """
 Day       Time   Rank  Score       Time   Rank  Score InputFile
+ 14   06:40:41  17984      0   07:09:13  11628      0   6:33:37
  13   05:53:26  14036      0   06:00:33  10742      0   5:34:52
  12   05:25:00  12897      0   33:20:00  18228      0   5:12:56   #NOTE - not complete
  11   06:20:08  20526      0   06:27:08  18361      0   6:06:58
@@ -124,7 +126,7 @@ fun List<Data>.printChart() {
         )
             .replace("[", "$ANSI_WHITE[")
             .replace("]", "]$ANSI_RESET")
-            .replace("**", "$ANSI_LIGHTBLUE*$ANSI_WHITE*")
+            .replace("**", "$ANSI_LIGHT_BLUE*$ANSI_WHITE*")
             .replace("* |", "*$ANSI_RESET |")
         println(line)
     }
