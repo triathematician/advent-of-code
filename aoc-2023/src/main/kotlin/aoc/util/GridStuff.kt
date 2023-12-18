@@ -50,6 +50,11 @@ operator fun List<String>.get(coord: Coord) = this[coord.second][coord.first]
 
 typealias Coord = Pair<Int, Int>
 
+val UP = Coord(0, -1)
+val DOWN = Coord(0, 1)
+val LEFT = Coord(-1, 0)
+val RIGHT = Coord(1, 0)
+
 val Coord.x
     get() = first
 val Coord.y

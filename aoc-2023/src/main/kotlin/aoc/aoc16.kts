@@ -47,12 +47,12 @@ fun List<String>.part1(print: Boolean, initPos: Coord = Coord(-1, 0), initDir: C
                     nextPaths += nxt to it.second
                 }
                 spc == '|' -> {
-                    nextPaths += nxt to Coord(0, 1)
-                    nextPaths += nxt to Coord(0, -1)
+                    nextPaths += nxt to DOWN
+                    nextPaths += nxt to UP
                 }
                 spc == '-' -> {
-                    nextPaths += nxt to Coord(1, 0)
-                    nextPaths += nxt to Coord(-1, 0)
+                    nextPaths += nxt to RIGHT
+                    nextPaths += nxt to LEFT
                 }
                 spc == '/' -> {
                     nextPaths += nxt to Coord(-it.second.y, -it.second.x)
@@ -76,10 +76,10 @@ fun List<String>.part1(print: Boolean, initPos: Coord = Coord(-1, 0), initDir: C
                     if (acc.isEmpty() || maze.at(coord) != '.') maze.at(coord)
                     else if (acc.size == 1) {
                         when (acc.first()) {
-                            Coord(0, 1) -> 'v'
-                            Coord(0, -1) -> '^'
-                            Coord(1, 0) -> '>'
-                            Coord(-1, 0) -> '<'
+                            DOWN -> 'v'
+                            UP -> '^'
+                            RIGHT -> '>'
+                            LEFT -> '<'
                             else -> throw Exception("bad path")
                         }
                     } else acc.size.toString()[0]
@@ -102,16 +102,16 @@ fun List<String>.part2(): Int {
     val max1 = maze.lines.yrange.maxOf { y ->
         print("..")
         maxOf(
-            part1(false, Coord(-1, y), Coord(1, 0)),
-            part1(false, Coord(maze.lines.xrange.last + 1, y), Coord(-1, 0))
+            part1(false, Coord(-1, y), RIGHT),
+            part1(false, Coord(maze.lines.xrange.last + 1, y), LEFT)
         )
     }
     println("half done")
     val max2 = maze.lines.xrange.maxOf { x ->
         print("..")
         maxOf(
-            part1(false, Coord(x, -1), Coord(0, 1)),
-            part1(false, Coord(x, maze.lines.yrange.last + 1), Coord(0, -1))
+            part1(false, Coord(x, -1), DOWN),
+            part1(false, Coord(x, maze.lines.yrange.last + 1), UP)
         )
     }
     println("done")
