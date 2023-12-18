@@ -27,10 +27,13 @@ fun intgrid(xsize: Int, ysize: Int) = grid(xsize, ysize) { 0 }
 
 //region get values in grids
 
-fun <X> List<List<X>>.allIndices() =
+fun <X> Array<Array<X>>.allIndices(): List<Coord> =
     indices.flatMap { y -> get(y).indices.map { x -> x to y }}
 
-fun CharGrid.allIndices2() =
+fun <X> List<List<X>>.allIndices(): List<Coord> =
+    indices.flatMap { y -> get(y).indices.map { x -> x to y }}
+
+fun CharGrid.allIndices2(): List<Coord> =
     indices.flatMap { y -> get(y).indices.map { x -> x to y }}
 
 val CharGrid.xrange
