@@ -8,6 +8,7 @@ import java.time.Month
 
 val leaders = """
 --100th Best Times for Each Puzzle--
+Day19: 10:23/29:12 (parsing conditions)
 Day18: 8:21/20:55 (area enclosed by loops)
 Day17: 14:05/20:00 (min paths in grids)
 Day16: 11:36/15:30 (laser grids)
@@ -30,6 +31,7 @@ Day1: 1:39/7:03 (extracting digits)
 
 val personalstats = """
 Day       Time   Rank  Score       Time   Rank  Score InputFile
+ 19   06:20:19  11776      0   06:53:17   6311      0   6:06:24
  18   06:15:05  10730      0   07:25:03   7034      0   5:43:34
  17   08:45:48   8141      0   09:53:49   7816      0   6:03:21
  16   06:28:06  12441      0   06:34:38  11454      0   6:12:21
