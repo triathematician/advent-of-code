@@ -64,12 +64,16 @@ val Coord.y
     get() = second
 
 operator fun Coord.plus(other: Coord) = Coord(first + other.first, second + other.second)
+operator fun Coord.minus(other: Coord) = Coord(first - other.first, second - other.second)
 fun Coord.plus(x: Int, y: Int) = Coord(first + x, second + y)
+fun Coord.adj() = listOf(left, right, top, bottom)
 
-fun Coord.adj(input: List<List<*>>) =
-    listOf(left, right, top, bottom).filter {
-        it.first in input.indices && it.second in input[0].indices
-    }
+fun Coord.adj(input: List<List<*>>) = adj().filter {
+    it.first in input[0].indices && it.second in input.indices
+}
+fun Coord.adj2(input: CharGrid) = adj().filter {
+    it.first in input[0].indices && it.second in input.indices
+}
 
 val Coord.left
     get() = first-1 to second
