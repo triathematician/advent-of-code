@@ -42,7 +42,10 @@ val CharGrid.yrange
     get() = indices
 
 fun CharGrid.at(c: Coord) = get(c.y).get(c.x)
+fun CharGrid.at(x: Int, y: Int) = get(y).get(x)
 fun CharGrid.get(x: Int, y: Int) = get(y).get(x)
+
+operator fun CharGrid.contains(c: Coord) = c.x in get(0).indices && c.y in indices
 
 operator fun <X> List<List<X>>.get(coord: Coord) = this[coord.second][coord.first]
 operator fun List<String>.get(coord: Coord) = this[coord.second][coord.first]

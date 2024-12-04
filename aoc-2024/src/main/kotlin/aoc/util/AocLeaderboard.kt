@@ -12,14 +12,17 @@ import kotlin.math.ceil
 
 fun main() {
     getLeaderboards()
+    println("\n\n")
+    println("Leaderboard 1 (JHU/APL):")
     printLeaderboard("leaderboard.json", highlight = "2651623", intervals = true)
+    println("\n\n")
+    println("Leaderboard 2 (Kotlin):")
     printLeaderboard("leaderboard2.json", highlight = "2651623", reduceFactor = 1, intervals = true)
 }
 
 private const val BIN_COUNT = 96
 
 private fun printLeaderboard(jsonFile: String, highlight: String? = null, reduceFactor: Int = 1, intervals: Boolean) {
-    println("\n".repeat(3))
     println("-".repeat(BIN_COUNT + 20) + " Dec 2024")
     val json = AocRunner::class.java.getResource(jsonFile).readText()
     val leaderboard = ObjectMapper()
@@ -43,7 +46,8 @@ private fun printLeaderboard(jsonFile: String, highlight: String? = null, reduce
 class AocLeaderboard(
     val event: String,
     val owner_id: Int,
-    val members: Map<String, AocMember>
+    val members: Map<String, AocMember>,
+    val day1_ts: Long
 )
 
 class AocMember(
