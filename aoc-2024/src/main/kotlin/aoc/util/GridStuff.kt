@@ -45,6 +45,13 @@ fun CharGrid.at(c: Coord) = get(c.y).get(c.x)
 fun CharGrid.at(x: Int, y: Int) = get(y).get(x)
 fun CharGrid.get(x: Int, y: Int) = get(y).get(x)
 
+fun CharGrid.matchAt(s: String, c: Coord, dir: Coord): Boolean {
+    return (c + (s.length - 1) * dir) in this &&
+            s.withIndex().all { (i, ch) ->
+                at(c + i * dir) == ch
+            }
+}
+
 operator fun CharGrid.contains(c: Coord) = c.x in get(0).indices && c.y in indices
 
 operator fun <X> List<List<X>>.get(coord: Coord) = this[coord.second][coord.first]
@@ -60,12 +67,24 @@ val UP = Coord(0, -1)
 val DOWN = Coord(0, 1)
 val LEFT = Coord(-1, 0)
 val RIGHT = Coord(1, 0)
+val NORTH = UP
+val SOUTH = DOWN
+val WEST = LEFT
+val EAST = RIGHT
+val NE = Coord(1, -1)
+val NW = Coord(-1, -1)
+val SE = Coord(1, 1)
+val SW = Coord(-1, 1)
+val DIRS4 = listOf(NORTH, SOUTH, EAST, WEST)
+val DIRS8 = listOf(NORTH, SOUTH, EAST, WEST, NE, NW, SE, SW)
 
 val Coord.x
     get() = first
 val Coord.y
     get() = second
 
+operator fun Int.times(c: Coord) = Coord(c.first * this, c.second * this)
+operator fun Coord.times(i: Int) = i * this
 operator fun Coord.plus(other: Coord) = Coord(first + other.first, second + other.second)
 operator fun Coord.minus(other: Coord) = Coord(first - other.first, second - other.second)
 fun Coord.plus(x: Int, y: Int) = Coord(first + x, second + y)

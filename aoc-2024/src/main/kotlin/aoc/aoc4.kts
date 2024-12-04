@@ -17,66 +17,28 @@ MXMXAXMASX
 
 // part 1
 
-fun List<String>.part1(): Int {
-    return allIndices2().sumOf {
-        xmas(it.x, it.y, 1, -1) +
-            xmas(it.x, it.y, 1, 0) +
-            xmas(it.x, it.y, 1, 1) +
-            xmas(it.x, it.y, 0, -1) +
-            xmas(it.x, it.y, 0, 1) +
-            xmas(it.x, it.y, -1, -1) +
-            xmas(it.x, it.y, -1, 0) +
-            xmas(it.x, it.y, -1, 1)
-    }
-}
-
-fun CharGrid.xmas(x: Int, y: Int, dx: Int, dy: Int): Int {
-    if (contains(Coord(x + 3 * dx, y + 3 * dy)) &&
-            at(x, y) == 'X' &&
-            at(x + dx, y + dy) == 'M' &&
-            at(x + 2 * dx, y + 2 * dy) == 'A' &&
-            at(x + 3 * dx, y + 3 * dy) == 'S')
-        return 1
-    return 0
+fun List<String>.part1() = allIndices2().sumOf {
+    DIRS8.filter { dir ->
+        matchAt("XMAS", it, dir)
+    }.size
 }
 
 // part 2
 
 fun List<String>.part2(): Int {
     return allIndices2().sumOf {
-        xmas2(it.x, it.y)
+        xmas2(it)
     }
 }
 
-fun CharGrid.xmas2(x: Int, y: Int): Int {
-    if ((x - 1 to y - 1) !in this || (x + 1 to y + 1) !in this || at(x, y) != 'A')
+fun CharGrid.mas(c: Coord, dir: Coord) = matchAt("MAS", c, dir)
+
+fun CharGrid.xmas2(c: Coord): Int {
+    if (c + NW !in this || c + SE !in this || at(c) != 'A')
         return 0
-    if (at(x - 1, y - 1) == 'M' && at(x - 1, y + 1) == 'M') {
-        if (at(x + 1, y - 1) == 'S' && at(x + 1, y + 1) == 'S') {
-            return 1
-        }
-    } else if (at(x - 1, y - 1) == 'M' && at(x + 1, y - 1) == 'M') {
-        if (at(x - 1, y + 1) == 'S' && at(x + 1, y + 1) == 'S') {
-            return 1
-        }
-    } else if (at(x - 1, y - 1) == 'S' && at(x + 1, y - 1) == 'S') {
-        if (at(x - 1, y + 1) == 'M' && at(x + 1, y + 1) == 'M') {
-            return 1
-        }
-    } else if (at(x - 1, y + 1) == 'S' && at(x + 1, y + 1) == 'S') {
-        if (at(x - 1, y - 1) == 'M' && at(x + 1, y - 1) == 'M') {
-            return 1
-        }
-    } else if (at(x - 1, y - 1) == 'S' && at(x - 1, y + 1) == 'S') {
-        if (at(x + 1, y - 1) == 'M' && at(x + 1, y + 1) == 'M') {
-            return 1
-        }
-    } else if (at(x - 1, y + 1) == 'S' && at(x - 1, y - 1) == 'S') {
-        if (at(x + 1, y + 1) == 'M' && at(x + 1, y - 1) == 'M') {
-            return 1
-        }
-    }
-    return 0
+    val foundX = (mas(c + NW, SE) || mas(c + SE, NW)) &&
+            (mas(c + NE, SW) || mas(c + SW, NE))
+    return if (foundX) 1 else 0
 }
 
 // calculate answers
