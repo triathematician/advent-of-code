@@ -1,19 +1,27 @@
 import aoc.util.ANSI_LIGHT_BLUE
 import aoc.util.ANSI_RESET
 import aoc.util.ANSI_WHITE
-import aoc.util.randomBlueWhite
+import aoc.report.randomBlueWhite
 import java.io.File
 import java.time.LocalDate
 import java.time.Month
 
 val leaders = """
 --100th Best Times for Each Puzzle--
-Day0: 1:39/7:03 (extracting digits)
+Day5: 1:58/3:43 (ordering rules)
+Day4: 1:30/5:41 (xmas word search)
+Day3: 1:24/3:22 (parsing calculations)
+Day2: 3:02/4:42 (monotonic sequences)
+Day1: 1:24/2:31 (sort similarity)
 """.trimIndent()
 
 val personalstats = """
-Day       Time   Rank  Score       Time   Rank  Score InputFile
-  0   07:36:34  61695      0   07:36:39  37712      0   7:11:11
+Day       Time   Rank   Score       Time    Rank  Score InputFile
+  5   08:04:59   40462      0   08:10:09   31847      0  07:55:36
+  4   07:33:53   41264      0   07:43:03   35252      0  07:24:02
+  3   09:53:26   65231      0   10:02:58   54671      0  09:30:00 // estimated
+  2   12:10:20   78024      0   12:13:02   55710      0  12:00:00 // estimated
+  1   36:10:00  135368      0   36:10:00  126387      0  36:00:00 // estimated
 """.trimIndent().lines().drop(1).map {
     val columns = it.trim().split("\\s+".toRegex())
     Data(columns[0].toInt(), columns[1], columns[2].toInt(), columns[4], columns[5].toInt(), columns[7])

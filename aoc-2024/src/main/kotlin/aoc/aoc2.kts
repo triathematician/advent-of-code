@@ -1,7 +1,6 @@
-import aoc.AocParser.Companion.parselines
+import aoc.util.AocParser.Companion.parselines
 import aoc.*
-import aoc.util.getDayInput
-import aoc.util.pairwise
+import aoc.getDayInput
 import aoc.util.parseInts
 import kotlin.math.absoluteValue
 

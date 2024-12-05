@@ -1,6 +1,8 @@
-package aoc.util
+package aoc.report
 
 import aoc.AocRunner
+import aoc.getLeaderboards
+import aoc.util.*
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
@@ -153,15 +155,15 @@ private fun printStarIntervals(year: Int, day: Int, info: List<AocDay>, userBin:
                     str += "$color⊗$ANSI_RESET"
                 } else if (end == null) {
                     str += if (color == ANSI_BRIGHT_GREEN) {
-                        "$ANSI_GREEN◌$ANSI_RESET"
+                        "${ANSI_GREEN}◌$ANSI_RESET"
                     } else {
-                        "$ANSI_BROWN◌$ANSI_RESET"
+                        "${ANSI_BROWN}◌$ANSI_RESET"
                     }
                 } else {
                     str += if (color == ANSI_BRIGHT_GREEN) {
-                        "$ANSI_DARK_GREEN»"
+                        "${ANSI_DARK_GREEN}»"
                     } else {
-                        "$ANSI_DARK_BROWN»"
+                        "${ANSI_DARK_BROWN}»"
                     }
                     str += "»".repeat(interval.last - start - 1) + color + "*" + ANSI_RESET
                 }
@@ -222,17 +224,17 @@ private fun binStar(date: LocalDate, ts: Long): Int {
 private fun printStar(line: Int, p0: Int, p1: Int, p2: Int, tot: Int, user1: Boolean, user2: Boolean) {
     when {
         user1 && user2 && line == 1 ->
-            print("$ANSI_BRIGHT_GREEN⊗$ANSI_RESET")
+            print("${ANSI_BRIGHT_GREEN}⊗$ANSI_RESET")
         user2 && !user1 && line == p0+1 ->
             print("$ANSI_BRIGHT_GREEN*$ANSI_RESET")
         user1 && !user2 && line == p2+1 ->
-            print("$ANSI_BRIGHT_GREEN•$ANSI_RESET")
+            print("${ANSI_BRIGHT_GREEN}•$ANSI_RESET")
         line in (1..p0) ->
-            print("$ANSI_BRIGHT_YELLOW⊗$ANSI_RESET")
+            print("${ANSI_BRIGHT_YELLOW}⊗$ANSI_RESET")
         line in (p0+1..p0+p2) ->
             print("$ANSI_BRIGHT_YELLOW*$ANSI_RESET")
         line in (p2+1..tot) ->
-            print("$ANSI_GRAY•$ANSI_RESET")
+            print("${ANSI_GRAY}•$ANSI_RESET")
         else -> print(" ")
     }
 }

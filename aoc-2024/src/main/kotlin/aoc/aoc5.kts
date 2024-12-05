@@ -1,6 +1,6 @@
-import aoc.AocParser.Companion.parselines
+import aoc.util.AocParser.Companion.parselines
 import aoc.*
-import aoc.util.getDayInput
+import aoc.getDayInput
 import aoc.util.second
 
 val testInput = """

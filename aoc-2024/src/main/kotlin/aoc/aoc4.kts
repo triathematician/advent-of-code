@@ -1,4 +1,4 @@
-import aoc.AocParser.Companion.parselines
+import aoc.util.AocParser.Companion.parselines
 import aoc.*
 import aoc.util.*
 

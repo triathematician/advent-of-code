@@ -1,4 +1,4 @@
-package aoc.util
+package aoc
 
 import java.io.File
 import java.net.HttpURLConnection

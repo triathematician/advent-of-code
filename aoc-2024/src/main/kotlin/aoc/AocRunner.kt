@@ -1,5 +1,7 @@
 package aoc
 
+import aoc.report.alternateBlueWhite
+import aoc.report.printSnowScene
 import aoc.util.*
 import java.lang.String.format
 

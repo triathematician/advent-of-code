@@ -1,5 +1,6 @@
-package aoc.util
+package aoc.report
 
+import aoc.util.*
 import kotlin.random.Random
 
 fun String.alternateRedGreen() = toCharArray().toList().chunked(2).joinToString("") {
@@ -49,7 +50,7 @@ fun printSnowScene(size: Int) {
         array[ht+1][it] = "_"
         array[ht+1][it+1] = "_"
         array[ht+1][it+2] = "\\"
-        array[ht+2][it] = "$ANSI_BROWN¦"
+        array[ht+2][it] = "${ANSI_BROWN}¦"
         array[ht+2][it+1] = "¦"
     }
 
@@ -77,6 +78,6 @@ fun printSnowScene(size: Int) {
     }
     array.forEach {
         val line = it.joinToString("")
-        println(line.replace("$ANSI_GREEN/\\ ", "$ANSI_GREEN/\\$ANSI_LIGHT_CYAN·"))
+        println(line.replace("$ANSI_GREEN/\\ ", "$ANSI_GREEN/\\${ANSI_LIGHT_CYAN}·"))
     }
 }

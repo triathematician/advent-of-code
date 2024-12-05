@@ -1,6 +1,6 @@
 import aoc.AocRunner
 import aoc.util.eachCount
-import aoc.util.getDayInput
+import aoc.getDayInput
 import kotlin.math.abs
 
 val input = getDayInput(1, 2024)

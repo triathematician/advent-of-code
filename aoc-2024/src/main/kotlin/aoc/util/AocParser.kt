@@ -1,4 +1,7 @@
-package aoc
+package aoc.util
+
+import aoc.PairChar
+import aoc.toIntRange
 
 /** Universal parser for various possible inputs. */
 class AocParser(_input: String) {

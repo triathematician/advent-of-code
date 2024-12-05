@@ -1,5 +1,6 @@
 package aoc.vis
 
+import aoc.report.alignWord
 import aoc.util.*
 
 class StackVisualizer(val stacks: List<List<Any?>>) {
