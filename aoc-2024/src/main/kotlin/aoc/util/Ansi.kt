@@ -19,18 +19,26 @@ const val ANSI_PURPLE = "\u001B[35m"
 const val ANSI_CYAN = "\u001B[36m"
 const val ANSI_GRAY = "\u001B[37m"
 
-const val ANSI_BRIGHT_GREEN = "\u001B[92m"
-const val ANSI_BRIGHT_YELLOW = "\u001B[93m"
+const val ANSI_LIGHT_GREEN = "\u001B[92m"
+const val ANSI_LIGHT_YELLOW = "\u001B[93m"
 const val ANSI_LIGHT_BLUE = "\u001B[94m"
+const val ANSI_LIGHT_PURPLE = "\u001B[95m"
+const val ANSI_PINK = "\u001B[95m"
 const val ANSI_WHITE = "\u001B[97m"
 
 // RGB COLORS
 
-const val ANSI_BROWN = "\u001b[38;5;130m"
-const val ANSI_DARK_BROWN = "\u001b[38;5;94m"
+const val ANSI_DARK_BLUE = "\u001b[38;5;18m"
 const val ANSI_DARK_GREEN = "\u001b[38;5;22m"
-const val ANSI_LIGHT_CYAN = "\u001b[38;5;51m"
 const val ANSI_DARK_CYAN = "\u001b[38;5;23m"
+const val ANSI_LIGHT_CYAN = "\u001b[38;5;51m"
+const val ANSI_DARK_PURPLE = "\u001b[38;5;54m"
+const val ANSI_GRAY_BLUE = "\u001b[38;5;67m"
+const val ANSI_GRAY_GREEN = "\u001b[38;5;71m"
+const val ANSI_DARK_BROWN = "\u001b[38;5;94m"
+const val ANSI_BROWN = "\u001b[38;5;130m"
+const val ANSI_GRAY_PURPLE = "\u001b[38;5;139m"
 
-const val PINK = "\u001b[38;5;201m"
-
+const val ANSI_B_PINK = "\u001b[38;2;214;2;112m"
+const val ANSI_B_PURPLE = "\u001b[38;2;155;79;150m"
+const val ANSI_B_BLUE = "\u001b[38;2;0;56;168m"

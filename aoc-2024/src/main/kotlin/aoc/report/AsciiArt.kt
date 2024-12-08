@@ -1,7 +1,6 @@
 package aoc.report
 
 import aoc.util.*
-import kotlin.random.Random
 
 fun String.alternateRedGreen() = toCharArray().toList().chunked(2).joinToString("") {
     "$ANSI_RED${it[0]}" + (if (it.size == 2) "$ANSI_GREEN${it[1]}" else "")
@@ -11,9 +10,9 @@ fun String.alternateBlueWhite() = toCharArray().toList().chunked(2).joinToString
     "$ANSI_LIGHT_BLUE${it[0]}" + (if (it.size == 2) "$ANSI_WHITE${it[1]}" else "")
 }
 
-fun String.randomBlueWhite() = toCharArray().toList().chunked(2).joinToString("") {
-    val ansi1 = if (Random.nextBoolean()) ANSI_LIGHT_BLUE else ANSI_WHITE
-    val ansi2 = if (Random.nextBoolean()) ANSI_LIGHT_BLUE else ANSI_WHITE
+fun String.randomColors(vararg colors: String) = toCharArray().toList().chunked(2).joinToString("") {
+    val ansi1 = colors.random()
+    val ansi2 = colors.random()
     "$ANSI_BOLD${ansi1}${it[0]}" + (if (it.size == 2) "${ansi2}${it[1]}" else "")
 }
 

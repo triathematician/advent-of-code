@@ -59,7 +59,9 @@ fun CharGrid.part2(): Int {
     val pos = findCoords2 { it == '^' }.values.first().first()
     // only makes sense for obstacles to be somewhere in current path
     val openPos = path(pos, NORTH).first.map { it.pos }.toSet()
+    var i = 0
     return openPos.count {
+        if (++i % 100 == 0) println(i)
         loopFrom(pos, it)
     }
 }

@@ -15,31 +15,58 @@ import kotlin.math.ceil
 fun main() {
     getLeaderboards()
     println("\n\n")
-    println("Leaderboard 1 (JHU/APL):")
+    println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Leaderboard 1 (JHU/APL):$ANSI_RESET")
     printLeaderboard("leaderboard.json", highlight = "2651623", intervals = true)
     println("\n\n")
-    println("Leaderboard 2 (Kotlin):")
+    println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Leaderboard 2 (Kotlin):$ANSI_RESET")
     printLeaderboard("leaderboard2.json", highlight = "2651623", reduceFactor = 1, intervals = true)
+    println("\n\n")
+    println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Personal Solve Times:$ANSI_RESET")
+    printSolveTimes("leaderboard.json", user = "2651623", intervals = true)
 }
 
+private const val YEAR = 2024
+private const val HIGHLIGHT_COLOR = ANSI_LIGHT_GREEN
+private const val HIGHLIGHT_DARK = ANSI_GREEN
+private const val HIGHLIGHT_SUBTLE = ANSI_GRAY_GREEN
+private const val OTHER_COLOR = ANSI_LIGHT_BLUE
+private const val OTHER_DARK = ANSI_BLUE
+private const val OTHER_SUBTLE = ANSI_GRAY_BLUE
 private const val BIN_COUNT = 96
+private const val MIN_ROWS = 4
 
 private fun printLeaderboard(jsonFile: String, highlight: String? = null, reduceFactor: Int = 1, intervals: Boolean) {
-    println("-".repeat(BIN_COUNT + 20) + " Dec 2024")
-    val json = AocRunner::class.java.getResource(jsonFile).readText()
-    val leaderboard = ObjectMapper()
-        .registerModule(KotlinModule.Builder().build())
-        .readValue<AocLeaderboard>(json)
+    println("-".repeat(BIN_COUNT + 2))
+    val leaderboard = readLeaderboard(jsonFile)
     val days = leaderboard.members.values.flatMap { it.completion_day_level.entries }
         .groupBy { it.key }
         .mapValues { it.value.map { it.value } }
     days.keys.map { it.toInt() }.sorted().forEach {
         val userBin = leaderboard.members[highlight]?.completion_day_level?.get(it.toString())
         if (intervals)
-            printStarIntervals(2024, it, days[it.toString()]!!, userBin, reduceFactor)
+            printStarIntervals(YEAR, it, days[it.toString()]!!, userBin, reduceFactor)
         else
-            printStars(2024, it, days[it.toString()]!!, userBin, reduceFactor)
+            printStars(YEAR, it, days[it.toString()]!!, userBin, reduceFactor)
     }
+}
+
+private fun printSolveTimes(jsonFile: String, user: String, reduceFactor: Int = 1, intervals: Boolean) {
+    println("-".repeat(BIN_COUNT + 2))
+    val leaderboard = readLeaderboard(jsonFile)
+    val userDays = leaderboard.members[user]!!.completion_day_level.toSortedMap().map {
+        DatedAocDay(it.key.toInt(), it.value)
+    }
+    if (intervals)
+        printStarIntervals(YEAR, 1, userDays, null, reduceFactor)
+    else
+        printStars(YEAR, 1, userDays, null, reduceFactor)
+}
+
+private fun readLeaderboard(jsonFile: String): AocLeaderboard {
+    val json = AocRunner::class.java.getResource(jsonFile).readText()
+    return ObjectMapper()
+        .registerModule(KotlinModule.Builder().build())
+        .readValue(json)
 }
 
 //region DATA OBJECTS
@@ -63,7 +90,9 @@ class AocMember(
     val completion_day_level: Map<String, AocDay>
 )
 
-class AocDay(
+class DatedAocDay(val day: Int, dayData: AocDay) : AocDay(dayData.puzzle1Index, dayData.puzzle1Ts, dayData.puzzle2Index, dayData.puzzle2Ts)
+
+open class AocDay(
     val puzzle1Index: Int,
     val puzzle1Ts: Long,
     val puzzle2Index: Int?,
@@ -129,22 +158,28 @@ private fun printStarIntervals(year: Int, day: Int, info: List<AocDay>, userBin:
     val userBin1 = userBin?.let { binStar(date, it.puzzle1Ts) }
     val userBin2 = userBin?.puzzle2Ts?.let { binStar(date, it) }
     val userStars = info.filter { it != userBin }.sortedBy { it.puzzle1Ts }.map {
-        binStar(date, it.puzzle1Ts) to it.puzzle2Ts?.let { binStar(date, it) }
+        val useDate = if (it is DatedAocDay) LocalDate.of(year, Month.DECEMBER, it.day) else date
+        binStar(useDate, it.puzzle1Ts) to it.puzzle2Ts?.let { binStar(useDate, it) }
     }
     val grid = mutableListOf<ChartInterval>()
     if (userBin1 != null) {
-        grid.add(ChartInterval(0, userBin1, userBin2, ANSI_BRIGHT_GREEN))
+        grid.add(ChartInterval(0, userBin1, userBin2, HIGHLIGHT_COLOR))
     }
     userStars.sortedByDescending { (it.second ?: it.first) - it.first }
-        .forEach { (p1, p2) -> grid.addInterval(p1, p2, ANSI_BRIGHT_YELLOW) }
+        .forEach { (p1, p2) -> grid.addInterval(p1, p2, OTHER_COLOR) }
     grid.map { it.row }.toSet().forEach {
         if (!grid.intersecting(it, BIN_COUNT, null)) {
             grid.add(ChartInterval(it, BIN_COUNT, null, ANSI_RESET))
         }
     }
-    grid.groupBy { it.row }.toSortedMap().entries.reversed().onEach {
-        var str = ""
-        val intervals = it.value.sortedBy { it.start }
+    val rows = grid.groupBy { it.row }.toSortedMap().entries.reversed()
+    if (rows.size < MIN_ROWS)
+        repeat(MIN_ROWS - rows.size) {
+            println("¦${" ".repeat(BIN_COUNT)}¦")
+        }
+    rows.onEach { (_, iv) ->
+        var str = "¦"
+        val intervals = iv.sortedBy { it.start }
         var pos = -1
         intervals.indices.forEach {
             with (intervals[it]) {
@@ -154,22 +189,24 @@ private fun printStarIntervals(year: Int, day: Int, info: List<AocDay>, userBin:
                 } else if (start == end) {
                     str += "$color⊗$ANSI_RESET"
                 } else if (end == null) {
-                    str += if (color == ANSI_BRIGHT_GREEN) {
-                        "${ANSI_GREEN}◌$ANSI_RESET"
+                    str += if (color == HIGHLIGHT_COLOR) {
+                        "${HIGHLIGHT_DARK}◌$ANSI_RESET"
                     } else {
-                        "${ANSI_BROWN}◌$ANSI_RESET"
+                        "${OTHER_DARK}◌$ANSI_RESET"
                     }
                 } else {
-                    str += if (color == ANSI_BRIGHT_GREEN) {
-                        "${ANSI_DARK_GREEN}»"
+                    str += if (color == HIGHLIGHT_COLOR) {
+                        "${HIGHLIGHT_SUBTLE}»"
                     } else {
-                        "${ANSI_DARK_BROWN}»"
+                        "${OTHER_SUBTLE}»"
                     }
                     str += "»".repeat(interval.last - start - 1) + color + "*" + ANSI_RESET
                 }
                 pos = interval.last
             }
         }
+        if (userBin == null)
+            str = str.replace(OTHER_COLOR, HIGHLIGHT_COLOR).replace(OTHER_DARK, HIGHLIGHT_DARK).replace(OTHER_SUBTLE, HIGHLIGHT_SUBTLE)
         println(str)
     }
     printAxis(BIN_COUNT, day, year)
@@ -198,12 +235,12 @@ private fun printAxis(bins: Int, day: Int, year: Int) {
     // print out every 6 hours with spaces in between
     println("-".repeat(bins + 6) + " Dec $day, $year")
     val spaceBetweenTicks = bins / 4
-    print("0h")
+    print(" 0h")
     print("%${spaceBetweenTicks - 2}s".format("6h"))
     print("%${spaceBetweenTicks}s".format("12h"))
     print("%${spaceBetweenTicks}s".format("18h"))
     print("%${spaceBetweenTicks}s".format("24h"))
-    print("|  >24h")
+    print("¦  >24h")
     println()
 }
 
@@ -224,15 +261,15 @@ private fun binStar(date: LocalDate, ts: Long): Int {
 private fun printStar(line: Int, p0: Int, p1: Int, p2: Int, tot: Int, user1: Boolean, user2: Boolean) {
     when {
         user1 && user2 && line == 1 ->
-            print("${ANSI_BRIGHT_GREEN}⊗$ANSI_RESET")
+            print("${HIGHLIGHT_COLOR}⊗$ANSI_RESET")
         user2 && !user1 && line == p0+1 ->
-            print("$ANSI_BRIGHT_GREEN*$ANSI_RESET")
+            print("$HIGHLIGHT_COLOR*$ANSI_RESET")
         user1 && !user2 && line == p2+1 ->
-            print("${ANSI_BRIGHT_GREEN}•$ANSI_RESET")
+            print("${HIGHLIGHT_COLOR}•$ANSI_RESET")
         line in (1..p0) ->
-            print("${ANSI_BRIGHT_YELLOW}⊗$ANSI_RESET")
+            print("${OTHER_COLOR}⊗$ANSI_RESET")
         line in (p0+1..p0+p2) ->
-            print("$ANSI_BRIGHT_YELLOW*$ANSI_RESET")
+            print("$OTHER_COLOR*$ANSI_RESET")
         line in (p2+1..tot) ->
             print("${ANSI_GRAY}•$ANSI_RESET")
         else -> print(" ")
