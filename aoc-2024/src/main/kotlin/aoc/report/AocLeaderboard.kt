@@ -13,7 +13,7 @@ import java.time.ZoneId
 import kotlin.math.ceil
 
 fun main() {
-    getLeaderboards()
+//    getLeaderboards()
     println("\n\n")
     println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Leaderboard 1 (JHU/APL):$ANSI_RESET")
     printLeaderboard("leaderboard.json", highlight = "2651623", intervals = true)
