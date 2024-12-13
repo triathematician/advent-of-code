@@ -1,5 +1,8 @@
 package aoc.util
 
+/** Count of each element in a list. */
+fun <E> List<E>.eachCount() = groupBy { it }.mapValues { it.value.size }
+
 /** Transpose a list of lists. */
 fun <E> List<List<E>>.transpose(): List<List<E>> =
     if (isEmpty() || first().isEmpty())

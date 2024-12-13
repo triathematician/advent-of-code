@@ -33,15 +33,15 @@ abstract class AocDay(val day: Int, val year: Int = 2015) {
 
         if (info.isNotEmpty()) {
             println("•".repeat(23).alternateRedGreen())
-            info.forEach { println("${ANSI_WHITE}$it") }
+            info.forEach { println("${ANSI_WHITE}$it$ANSI_RESET") }
         }
 
         println("•".repeat(23).alternateRedGreen())
-        println("${ANSI_WHITE}Test Answers: $testResult, ${test2()}")
+        println("${ANSI_WHITE}Test Answers: $testResult, ${test2()}$ANSI_RESET")
 
         println("•".repeat(23).alternateRedGreen())
-        println("${ANSI_GREEN}Part 1 ${ANSI_RED}Answer: $ANSI_LIGHT_YELLOW${part1()}")
-        println("${ANSI_GREEN}Part 2 ${ANSI_RED}Answer: $ANSI_LIGHT_YELLOW${part2()}")
+        println("${ANSI_GREEN}Part 1 ${ANSI_RED}Answer: $ANSI_LIGHT_YELLOW${part1()}$ANSI_RESET")
+        println("${ANSI_GREEN}Part 2 ${ANSI_RED}Answer: $ANSI_LIGHT_YELLOW${part2()}$ANSI_RESET")
 
         println("•".repeat(23).alternateRedGreen())
 
