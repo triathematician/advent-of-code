@@ -1,71 +1,28 @@
 import aoc.util.*
-import java.io.File
-import java.time.LocalDate
-import java.time.Month
 
-private val YEAR = 2024
-val COLORA = ANSI_B_BLUE
-val COLORB = ANSI_B_PURPLE
-val COLORC = ANSI_B_PINK
+object AocStats {
+    val COLORA = ANSI_B_BLUE
+    val COLORB = ANSI_B_PURPLE
+    val COLORC = ANSI_B_PINK
 
-val leaders = """
---100th Best Times for Each Puzzle--
-Day12: 2:04/17:42 (grid regions)
-Day11: 1:36/6:24 (integer duplicators)
-Day10: 2:07/4:14 (simple pathfinding)
-Day9: 5:51/14:05 (defrag checksums)
-Day8: 3:57/7:12 (antenna grid)
-Day7: 1:59/3:47 (inserting operators)
-Day6: 2:40/8:53 (paths in grid)
-Day5: 1:58/3:43 (ordering rules)
-Day4: 1:30/5:41 (xmas word search)
-Day3: 1:24/3:22 (parsing calculations)
-Day2: 3:02/4:42 (monotonic sequences)
-Day1: 1:24/2:31 (sort similarity)
-""".trimIndent()
-
-val personalstats = """
-Day       Time   Rank   Score       Time    Rank  Score InputFile
- 12   07:25:24   21029      0   07:49:46   11686      0  07:08:48
- 11   07:05:24   28994      0   07:17:31   19360      0  06:57:14
- 10   10:51:22   30257      0   10:52:10   29045      0  10:40:01
-  9   07:23:54   25619      0   07:32:19   16224      0  06:46:11
-  8   07:35:39   26750      0   07:37:39   24005      0  07:26:27
-  7   08:01:32   29681      0   08:10:16   27082      0  07:31:48
-  6   07:04:43   34915      0   31:50:42   46903      0  06:57:41
-  5   08:04:59   40462      0   08:10:09   31847      0  07:55:36
-  4   07:33:53   41264      0   07:43:03   35252      0  07:24:02
-  3   09:53:26   65231      0   10:02:58   54671      0  09:49:45
-  2   12:10:20   78024      0   12:13:02   55710      0  12:03:13
-  1   35:55:16  135368      0   35:59:44  126387      0  35:48:12
-""".trimIndent().lines().drop(1).map {
-    val columns = it.trim().split("\\s+".toRegex())
-    Data(columns[0].toInt(), columns[1], columns[2].toInt(), columns[4], columns[5].toInt(), columns[7])
-}
-
-personalstats.printChart()
-personalstats.printRankStats()
-personalstats.printTimeStats()
-
-printHeader("Updating Files")
-updateFiles()
-println("Done!")
-
-fun updateFiles() {
-    val rootPath = File(File("").absolutePath.substringBeforeLast("aoc-$YEAR") + "aoc-$YEAR")
-    val codePath = File(rootPath, "src/main/kotlin/aoc/")
-    val day = LocalDate.now().let {
-        if (it.year == YEAR && it.month == Month.DECEMBER) minOf(it.dayOfMonth + 1, 25) else -1
-    }
-    if (day != -1) {
-        val codeTemplate = File(codePath, "aoc_.kts").readText().replace("day = 0", "day = $day")
-        val inputCode = File(codePath, "aoc$day.kts")
-        if (!inputCode.exists()) {
-            inputCode.writeText(codeTemplate)
-            println("Created file ${inputCode.name}")
+    fun printStats(personalStats: String) {
+        val data = personalStats.trimIndent().lines().drop(1).map {
+            val columns = it.trim().split("\\s+".toRegex())
+            Data(
+                day = columns[0].toInt(),
+                time = columns[1],
+                rank = columns[2].toInt(),
+                time2 = columns[4],
+                rank2 = columns[5].toInt(),
+                timeFile = columns.getOrNull(7)
+            )
         }
+        data.printChart(COLORA, COLORB, COLORC)
+        data.printRankStats()
+        data.printTimeStats()
     }
 }
+
 
 //region UTILS
 
@@ -142,7 +99,7 @@ fun List<Int>.printHistogramMinutes(min: Int? = 0, bucketSize: Int = 1, overflow
     println()
 }
 
-fun List<Data>.printChart() {
+fun List<Data>.printChart(color1: String, color2: String, color3: String) {
     val rankOp = { it: Number -> kotlin.math.log2(it.toDouble()) }
 
     val sortedRanks = (map { it.rank } + map { it.rank2 }).map(rankOp).sorted()
@@ -169,7 +126,7 @@ fun List<Data>.printChart() {
         )
             .replace("[", "$ANSI_WHITE[")
             .replace("]", "]$ANSI_RESET")
-            .colorStars()
+            .colorStars(color1, color2, color3)
         println(line)
     }
 }
@@ -191,18 +148,18 @@ fun List<Data>.printRankStats() {
 fun List<Data>.printTimeStats() {
     printHeader("Time to Solve Part 1")
 //    map { it.timePart1 }.sorted().map { it.hms() }.printSummary()
-    map { it.timePart1 }.printHistogramMinutes(bucketSize = 5, overflow = 60)
+    mapNotNull { it.timePart1 }.printHistogramMinutes(bucketSize = 5, overflow = 60)
 
     printHeader("Time to Solve Part 2")
 //    map { it.timePart2 }.sorted().map { it.hms() }.printSummary()
-    map { it.timePart2 }.printHistogramMinutes(bucketSize = 5, overflow = 60)
+    mapNotNull { it.timePart2 }.printHistogramMinutes(bucketSize = 5, overflow = 60)
 
     printHeader("Time to Solve Both")
 //    map { it.timeBoth }.sorted().map { it.hms() }.printSummary()
-    map { it.timeBoth }.printHistogramMinutes(bucketSize = 5, overflow = 60)
+    mapNotNull { it.timeBoth }.printHistogramMinutes(bucketSize = 5, overflow = 60)
 }
 
-fun String.colorStars(): String {
+fun String.colorStars(color1: String, color2: String, color3: String): String {
     // find each substring of stars, and add a color code before each, then an ansi reset after the last star
     val find = "\\*+".toRegex()
     var result = ""
@@ -211,7 +168,7 @@ fun String.colorStars(): String {
         result += substring(pos, it.range.first)
         val range = it.range
         val size = range.last - range.first + 1
-        result += (1..size/3+1).flatMap { listOf("$COLORA*", "$COLORB*", "$COLORC*") }
+        result += (1..size/3+1).flatMap { listOf("$color1*", "$color2*", "$color3*") }
             .take(size)
             .joinToString("") + ANSI_RESET
         pos = range.last + 1
@@ -226,11 +183,11 @@ data class Data(
     val rank: Int,
     val time2: String,
     val rank2: Int,
-    val timeFile: String
+    val timeFile: String?
 ) {
-    val timePart1 = time.parseTime() - timeFile.parseTime()
-    val timePart2 = time2.parseTime() - time.parseTime()
-    val timeBoth = timePart1 + timePart2
+    val timePart1 = timeFile?.let { time.parseTime() - it.parseTime() }
+    val timePart2 = if (time == ">24h" || time2 == ">24h") null else time2.parseTime() - time.parseTime()
+    val timeBoth = if (timePart1 != null && timePart2 != null) timePart1 + timePart2 else null
 
     private fun String.parseTime() = split(':').map { it.toInt() }.let { (h, m, s) -> h * 3600 + m * 60 + s }
 }

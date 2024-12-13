@@ -1,31 +1,32 @@
 package aoc.report
 
-import aoc.AocRunner
-import aoc.getLeaderboards
+import aoc.AocDay0
+import aoc.input.getLeaderboards
+import aoc.input.rootDir
 import aoc.util.*
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
+import java.io.File
 import java.time.LocalDate
 import java.time.Month
 import java.time.ZoneId
 import kotlin.math.ceil
 
-fun main() {
-    getLeaderboards()
+fun printLeaderboard(year: Int) {
+    getLeaderboards(year)
     println("\n\n")
     println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Leaderboard 1 (JHU/APL):$ANSI_RESET")
-    printLeaderboard("leaderboard.json", highlight = "2651623", intervals = true)
+    printLeaderboard(year, "leaderboard.json", highlight = "2651623", intervals = true)
     println("\n\n")
     println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Leaderboard 2 (Kotlin):$ANSI_RESET")
-    printLeaderboard("leaderboard2.json", highlight = "2651623", reduceFactor = 1, intervals = true)
+    printLeaderboard(year, "leaderboard2.json", highlight = "2651623", reduceFactor = 1, intervals = true)
     println("\n\n")
     println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Personal Solve Times:$ANSI_RESET")
-    printSolveTimes("leaderboard.json", user = "2651623", intervals = true)
+    printSolveTimes(year, "leaderboard.json", user = "2651623", intervals = true)
 }
 
-private const val YEAR = 2024
 private const val HIGHLIGHT_COLOR = ANSI_LIGHT_GREEN
 private const val HIGHLIGHT_DARK = ANSI_GREEN
 private const val HIGHLIGHT_SUBTLE = ANSI_GRAY_GREEN
@@ -35,35 +36,36 @@ private const val OTHER_SUBTLE = ANSI_GRAY_BLUE
 private const val BIN_COUNT = 96
 private const val MIN_ROWS = 4
 
-private fun printLeaderboard(jsonFile: String, highlight: String? = null, reduceFactor: Int = 1, intervals: Boolean) {
+private fun printLeaderboard(year: Int, jsonFile: String, highlight: String? = null, reduceFactor: Int = 1, intervals: Boolean) {
     println("-".repeat(BIN_COUNT + 2))
-    val leaderboard = readLeaderboard(jsonFile)
+    val leaderboard = readLeaderboard(year, jsonFile)
     val days = leaderboard.members.values.flatMap { it.completion_day_level.entries }
         .groupBy { it.key }
         .mapValues { it.value.map { it.value } }
     days.keys.map { it.toInt() }.sorted().forEach {
         val userBin = leaderboard.members[highlight]?.completion_day_level?.get(it.toString())
         if (intervals)
-            printStarIntervals(YEAR, it, days[it.toString()]!!, userBin, reduceFactor)
+            printStarIntervals(year, it, days[it.toString()]!!, userBin, reduceFactor)
         else
-            printStars(YEAR, it, days[it.toString()]!!, userBin, reduceFactor)
+            printStars(year, it, days[it.toString()]!!, userBin, reduceFactor)
     }
 }
 
-private fun printSolveTimes(jsonFile: String, user: String, reduceFactor: Int = 1, intervals: Boolean) {
+private fun printSolveTimes(year: Int, jsonFile: String, user: String, reduceFactor: Int = 1, intervals: Boolean) {
     println("-".repeat(BIN_COUNT + 2))
-    val leaderboard = readLeaderboard(jsonFile)
+    val leaderboard = readLeaderboard(year, jsonFile)
     val userDays = leaderboard.members[user]!!.completion_day_level.toSortedMap().map {
         DatedAocDay(it.key.toInt(), it.value)
     }
     if (intervals)
-        printStarIntervals(YEAR, 1, userDays, null, reduceFactor)
+        printStarIntervals(year, 1, userDays, null, reduceFactor)
     else
-        printStars(YEAR, 1, userDays, null, reduceFactor)
+        printStars(year, 1, userDays, null, reduceFactor)
 }
 
-private fun readLeaderboard(jsonFile: String): AocLeaderboard {
-    val json = AocRunner::class.java.getResource(jsonFile).readText()
+private fun readLeaderboard(year: Int, jsonFile: String): AocLeaderboard {
+    val json = File(rootDir(year), "src/main/resources/aoc/$jsonFile")
+        AocDay0::class.java.getResource(jsonFile)!!.readText()
     return ObjectMapper()
         .registerModule(KotlinModule.Builder().build())
         .readValue(json)

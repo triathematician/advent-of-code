@@ -29,22 +29,23 @@ fun getDayInput(day: Int, year: Int): List<String> {
 private const val MIN_LEADERBOARD_REFRESH_MILLIS = 1000 * 60 * 20
 
 /** Get leaderboards. */
-fun getLeaderboards() {
+fun getLeaderboards(year: Int) {
     val ts = System.currentTimeMillis()
-    val fl1 = File(rootDir(2024), "src/main/resources/aoc/leaderboard.json")
-    if (fl1.exists() && ts - fl1.lastModified() < MIN_LEADERBOARD_REFRESH_MILLIS)
-        return
-
-    val url1 = URL("https://adventofcode.com/2024/leaderboard/private/view/917872.json")
-    readAocText(url1)?.let {
-        println("Successfully downloaded leaderboard 1")
-        fl1.writeText(it)
+    val fl1 = File(rootDir(year), "src/main/resources/aoc/leaderboard.json")
+    if (!fl1.exists() || ts - fl1.lastModified() > MIN_LEADERBOARD_REFRESH_MILLIS) {
+        val url1 = URL("https://adventofcode.com/$year/leaderboard/private/view/917872.json")
+        readAocText(url1)?.let {
+            println("Successfully downloaded leaderboard 1")
+            fl1.writeText(it)
+        }
     }
-    val fl2 = File(rootDir(2024), "src/main/resources/aoc/leaderboard2.json")
-    val url2 = URL("https://adventofcode.com/2024/leaderboard/private/view/3240090.json")
-    readAocText(url2)?.let {
-        println("Successfully downloaded leaderboard 2")
-        fl2.writeText(it)
+    val fl2 = File(rootDir(year), "src/main/resources/aoc/leaderboard2.json")
+    if (!fl2.exists() || ts - fl2.lastModified() > MIN_LEADERBOARD_REFRESH_MILLIS) {
+        val url2 = URL("https://adventofcode.com/$year/leaderboard/private/view/3240090.json")
+        readAocText(url2)?.let {
+            println("Successfully downloaded leaderboard 2")
+            fl2.writeText(it)
+        }
     }
 }
 
@@ -58,7 +59,7 @@ private fun readAocText(url: URL): String? {
     return null
 }
 
-private fun rootDir(year: Int): File {
+fun rootDir(year: Int): File {
     var root = File("").absoluteFile
     while (root.name != ROOT_FOLDER) root = root.parentFile
     return File(root, "aoc-$year")
