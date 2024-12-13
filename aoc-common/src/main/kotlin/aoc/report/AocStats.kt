@@ -10,7 +10,6 @@ val COLORC = ANSI_B_PINK
 
 val leaders = """
 --100th Best Times for Each Puzzle--
-Day13: 3:37/11:04 (integer programming)
 Day12: 2:04/17:42 (grid regions)
 Day11: 1:36/6:24 (integer duplicators)
 Day10: 2:07/4:14 (simple pathfinding)
@@ -27,7 +26,6 @@ Day1: 1:24/2:31 (sort similarity)
 
 val personalstats = """
 Day       Time   Rank   Score       Time    Rank  Score InputFile
- 13   06:45:12   19126      0   07:33:15   14939      0  06:30:27
  12   07:25:24   21029      0   07:49:46   11686      0  07:08:48
  11   07:05:24   28994      0   07:17:31   19360      0  06:57:14
  10   10:51:22   30257      0   10:52:10   29045      0  10:40:01

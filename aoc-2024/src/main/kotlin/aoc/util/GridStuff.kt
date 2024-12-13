@@ -63,6 +63,7 @@ operator fun List<String>.get(coord: Coord) = this[coord.second][coord.first]
 
 typealias Coord = Pair<Int, Int>
 
+val ORIGIN = Coord(0, 0)
 val UP = Coord(0, -1)
 val DOWN = Coord(0, 1)
 val LEFT = Coord(-1, 0)
@@ -111,7 +112,6 @@ fun Coord.adjacentTo(other: Coord, diagonal: Boolean) = when {
     else -> (other.x == x && (other.y - y).absoluteValue <= 1) ||
             (other.y == y && (other.x - x).absoluteValue <= 1)
 }
-
 //endregion
 
 //region finders
@@ -123,7 +123,7 @@ fun <X> List<List<X>>.find(ch: X): Coord {
 }
 
 fun <X> List<List<X>>.findCoords(pred: (X) -> Boolean): Map<X, List<Coord>> =
-    allIndices().filter { pred(this[it]) }.groupBy { this[it] }
+    allIndices().filter { pred(this[it]) }.groupBy { get(it.y)[it.x] }
 
 fun CharGrid.findCoords2(pred: (Char) -> Boolean): Map<Char, List<Coord>> =
     allIndices2().filter { pred(this[it]) }.groupBy { this[it] }
