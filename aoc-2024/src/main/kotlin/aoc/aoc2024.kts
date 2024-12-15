@@ -10,6 +10,8 @@ val COLORC = ANSI_B_PINK
 
 val leaders = """
 --100th Best Times for Each Puzzle--
+Day15: 9:30/32:00 (pushing boxes)
+Day14: 3:06/15:48 (robot easter egg)
 Day13: 3:37/11:04 (integer programming)
 Day12: 2:04/17:42 (grid regions)
 Day11: 1:36/6:24 (integer duplicators)
@@ -27,6 +29,8 @@ Day1: 1:24/2:31 (sort similarity)
 
 val personalstats = """
 Day       Time   Rank   Score       Time    Rank  Score InputFile
+ 15   07:51:56   17842      0   08:23:59   10077      0  07:21:24
+ 14   06:50:12   18194      0   07:19:19   14422      0  06:39:35
  13   06:45:12   19126      0   07:33:15   14939      0  06:30:27
  12   07:25:24   21029      0   07:49:46   11686      0  07:08:48
  11   07:05:24   28994      0   07:17:31   19360      0  06:57:14
@@ -87,21 +91,43 @@ fun List<*>.improvementSummary() {
     println("${ANSI_BROWN}Lowest drop:  $ANSI_BOLD${last()}${ANSI_RESET}")
 }
 
-fun List<Int>.printHistogram(min: Int? = 0, bucketSize: Int = 1000) {
+fun List<Int>.printHistogram(min: Int? = 0, bucketSize: Int = 1000, overflow: Int = Int.MAX_VALUE) {
+    val SIZE = 3
     if (isEmpty()) {
         println("EMPTY")
         return
     }
     val min = min ?: min()
-    val max = max()
+    val max = minOf(max(), overflow)
     val range = max - min
     val buckets = IntArray(range / bucketSize + 1)
-    forEach { buckets[(it - min) / bucketSize]++ }
-    buckets.forEachIndexed { i, count ->
-        val rangeStart = min + i * bucketSize
-        val rangeEnd = rangeStart + bucketSize
-        val bar = "*".repeat(count * 3)
-        println("%5d - %5d: $bar".format(rangeStart, rangeEnd-1))
+    var ucount = 0
+    var ocount = 0
+    forEach {
+        when {
+            it < min -> ucount++
+            it >= overflow -> ocount++
+            else -> buckets[(it - min) / bucketSize]++
+        }
+    }
+    if (ucount > 0) {
+        val ubar = "*".repeat(ucount * SIZE)
+        println("     < %6d: $ubar".format(min))
+        if (buckets[0] == 0)
+            println(".".repeat(13))
+    }
+    buckets.withIndex().dropWhile { it.value == 0 }.dropLastWhile { it.value == 0 }
+        .forEach { (i, count) ->
+            val rangeStart = min + i * bucketSize
+            val rangeEnd = rangeStart + bucketSize
+            val bar = "*".repeat(count * SIZE)
+            println("%5d — %5d: $bar".format(rangeStart, rangeEnd - 1))
+        }
+    if (ocount > 0) {
+        if (buckets.last() == 0)
+            println(".".repeat(13))
+        val obar = "*".repeat(ocount * SIZE)
+        println("%5d +      : $obar".format(overflow))
     }
 }
 
@@ -129,7 +155,7 @@ fun List<Int>.printHistogramMinutes(min: Int? = 0, bucketSize: Int = 1, overflow
         val rangeStart = useMin + i * bucketSize
         val rangeEnd = rangeStart + bucketSize
         val bar = "*".repeat(count * 3)
-        print("%2d:00 - %2d:59: $bar".format(rangeStart, rangeEnd-1))
+        print("%2d:00 — %2d:59: $bar".format(rangeStart, rangeEnd-1))
         if (numMin/60 in rangeStart until rangeEnd)
             print("  $ANSI_BOLD${ANSI_LIGHT_GREEN}BEST: ${numMin.minSec()}$ANSI_RESET")
         if (numMed/60 in rangeStart until rangeEnd)
@@ -138,10 +164,12 @@ fun List<Int>.printHistogramMinutes(min: Int? = 0, bucketSize: Int = 1, overflow
             print("  $ANSI_BOLD${ANSI_BROWN}WORST: ${numMax.minSec()}$ANSI_RESET")
         println()
     }
-    print("     >= %2d:00: ${"***".repeat(nOver)}".format(useMin + buckets.size * bucketSize))
-    if (numMax >= overflow * 60)
-        print("  $ANSI_BOLD${ANSI_BROWN}WORST: ${numMax.hms()}$ANSI_RESET")
-    println()
+    if (nOver > 0) {
+        print("%2d:00 +     : ${"***".repeat(nOver)}".format(useMin + buckets.size * bucketSize))
+        if (numMax >= overflow * 60)
+            print("  $ANSI_BOLD${ANSI_BROWN}WORST: ${numMax.hms()}$ANSI_RESET")
+        println()
+    }
 }
 
 fun List<Data>.printChart() {
@@ -179,29 +207,29 @@ fun List<Data>.printChart() {
 fun List<Data>.printRankStats() {
     printHeader("Part 1 Ranks")
     map { it.rank }.sorted().printSummary()
-    map { it.rank }.printHistogram(bucketSize = 10000)
+    map { it.rank }.printHistogram(bucketSize = 5000, overflow = 65000)
 
     printHeader("Part 2 Ranks")
     map { it.rank2 }.sorted().printSummary()
-    map { it.rank2 }.printHistogram(bucketSize = 10000)
+    map { it.rank2 }.printHistogram(bucketSize = 5000, overflow = 125000)
 
     printHeader("Number of Ranks Dropped")
     map { it.rank - it.rank2 }.sortedDescending().improvementSummary()
-    map { it.rank - it.rank2 }.printHistogram(min = -15000, bucketSize = 5000)
+    map { it.rank - it.rank2 }.printHistogram(min = -10000, bucketSize = 2000, overflow = 22000)
 }
 
 fun List<Data>.printTimeStats() {
     printHeader("Time to Solve Part 1")
 //    map { it.timePart1 }.sorted().map { it.hms() }.printSummary()
-    map { it.timePart1 }.printHistogramMinutes(bucketSize = 5, overflow = 60)
+    map { it.timePart1 }.printHistogramMinutes(bucketSize = 2, overflow = 60)
 
     printHeader("Time to Solve Part 2")
 //    map { it.timePart2 }.sorted().map { it.hms() }.printSummary()
-    map { it.timePart2 }.printHistogramMinutes(bucketSize = 5, overflow = 60)
+    map { it.timePart2 }.printHistogramMinutes(bucketSize = 2, overflow = 60)
 
     printHeader("Time to Solve Both")
 //    map { it.timeBoth }.sorted().map { it.hms() }.printSummary()
-    map { it.timeBoth }.printHistogramMinutes(bucketSize = 5, overflow = 60)
+    map { it.timeBoth }.printHistogramMinutes(bucketSize = 2, overflow = 60)
 }
 
 fun String.colorStars(): String {

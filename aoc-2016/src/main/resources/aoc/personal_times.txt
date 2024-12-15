@@ -1,4 +1,0 @@
-Day       Time   Rank  Score       Time   Rank  Score
-  3       >24h  25365      0       >24h  22704      0
-  2       >24h  27139      0       >24h  24091      0
-  1       >24h  34765      0       >24h  27101      0
