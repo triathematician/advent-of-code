@@ -1,14 +1,9 @@
 package aoc.report
 
-import aoc.AocDay0
-import aoc.input.getLeaderboards
-import aoc.input.rootDir
+import aoc.report.AocSite.getLeaderboards
+import aoc.report.AocSite.readLeaderboard
 import aoc.util.*
 import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.fasterxml.jackson.module.kotlin.readValue
-import java.io.File
 import java.time.LocalDate
 import java.time.Month
 import java.time.ZoneId
@@ -61,14 +56,6 @@ private fun printSolveTimes(year: Int, jsonFile: String, user: String, reduceFac
         printStarIntervals(year, 1, userDays, null, reduceFactor)
     else
         printStars(year, 1, userDays, null, reduceFactor)
-}
-
-private fun readLeaderboard(year: Int, jsonFile: String): AocLeaderboard {
-    val json = File(rootDir(year), "src/main/resources/aoc/$jsonFile")
-        AocDay0::class.java.getResource(jsonFile)!!.readText()
-    return ObjectMapper()
-        .registerModule(KotlinModule.Builder().build())
-        .readValue(json)
 }
 
 //region DATA OBJECTS

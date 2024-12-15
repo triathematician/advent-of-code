@@ -1,5 +1,6 @@
 package aoc.input
 
+import aoc.report.AocSite.rootDir
 import printHeader
 import java.io.File
 import java.time.LocalDate

@@ -1,7 +1,7 @@
 package aoc
 
 import aoc.input.getDayInput
-import aoc.input.getLeaderboards
+import aoc.report.AocSite.getLeaderboards
 import aoc.report.alternateRedGreen
 import aoc.report.printChristmasTree
 import aoc.util.*
