@@ -62,6 +62,7 @@ operator fun List<String>.get(coord: Coord) = this[coord.second][coord.first]
 //region coordinates
 
 typealias Coord = Pair<Int, Int>
+data class PosDir(val pos: Coord, val dir: Coord)
 
 val ORIGIN = Coord(0, 0)
 val UP = Coord(0, -1)
@@ -84,6 +85,29 @@ val Coord.x
 val Coord.y
     get() = second
 
+fun Coord.dirChar() = when (this) {
+    UP -> '^'
+    DOWN -> 'v'
+    LEFT -> '<'
+    RIGHT -> '>'
+    else -> '?'
+}
+
+fun Coord.turnRight() = when (this) {
+    UP -> RIGHT
+    RIGHT -> DOWN
+    DOWN -> LEFT
+    LEFT -> UP
+    else -> throw IllegalArgumentException("Invalid direction")
+}
+fun Coord.turnLeft() = when (this) {
+    UP -> LEFT
+    LEFT -> DOWN
+    DOWN -> RIGHT
+    RIGHT -> UP
+    else -> throw IllegalArgumentException("Invalid direction")
+}
+
 operator fun Int.times(c: Coord) = Coord(c.first * this, c.second * this)
 operator fun Coord.times(i: Int) = i * this
 operator fun Coord.plus(other: Coord) = Coord(first + other.first, second + other.second)
@@ -97,6 +121,7 @@ fun Coord.adj(input: List<List<*>>) = adj().filter {
 fun Coord.adj2(input: CharGrid) = adj().filter {
     it.first in input[0].indices && it.second in input.indices
 }
+fun Coord.taxicab(other: Coord) = (x - other.x).absoluteValue + (y - other.y).absoluteValue
 
 val Coord.left
     get() = first-1 to second

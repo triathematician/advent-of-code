@@ -24,8 +24,6 @@ fun CharGrid.part1(): Int {
     return path(pos, NORTH).first.map { it.pos }.toSet().size
 }
 
-data class PosDir(val pos: Coord, val dir: Coord)
-
 /** Get set of coords until leaving the map, or repeating. */
 fun CharGrid.path(p: Coord, d: Coord): Pair<Set<PosDir>, Boolean> {
     val coords = allIndices2()

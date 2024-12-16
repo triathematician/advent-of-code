@@ -10,6 +10,7 @@ val COLORC = ANSI_B_PINK
 
 val leaders = """
 --100th Best Times for Each Puzzle--
+Day16: 2:40/13:47 (classic maze pathfinding)
 Day15: 9:30/32:00 (pushing boxes)
 Day14: 3:06/15:48 (robot easter egg)
 Day13: 3:37/11:04 (integer programming)
@@ -29,6 +30,7 @@ Day1: 1:24/2:31 (sort similarity)
 
 val personalstats = """
 Day       Time   Rank   Score       Time    Rank  Score InputFile
+ 16   07:36:19   12648      0   08:18:34    8895      0  06:46:41
  15   07:51:56   17842      0   08:23:59   10077      0  07:21:24
  14   06:50:12   18194      0   07:19:19   14422      0  06:39:35
  13   06:45:12   19126      0   07:33:15   14939      0  06:30:27
@@ -90,6 +92,33 @@ fun List<*>.improvementSummary() {
     println("${ANSI_LIGHT_YELLOW}Median drop:  $ANSI_BOLD${this[size / 2]}${ANSI_RESET}")
     println("${ANSI_BROWN}Lowest drop:  $ANSI_BOLD${last()}${ANSI_RESET}")
 }
+
+fun List<Data>.printRankStats() {
+    printHeader("Part 1 Ranks")
+    map { it.rank }.sorted().printSummary()
+    map { it.rank }.printHistogram(bucketSize = 5000, overflow = 65000)
+
+    printHeader("Part 2 Ranks")
+    map { it.rank2 }.sorted().printSummary()
+    map { it.rank2 }.printHistogram(bucketSize = 5000, overflow = 125000)
+
+    printHeader("Number of Ranks Dropped")
+    map { it.rank - it.rank2 }.sortedDescending().improvementSummary()
+    map { it.rank - it.rank2 }.printHistogram(min = -10000, bucketSize = 2000, overflow = 22000)
+}
+
+fun List<Data>.printTimeStats() {
+    printHeader("Time to Solve Part 1")
+    map { it.timePart1 }.printHistogramMinutes(bucketSize = 2, overflow = 60)
+
+    printHeader("Time to Solve Part 2")
+    map { it.timePart2 }.printHistogramMinutes(bucketSize = 2, overflow = 60)
+
+    printHeader("Time to Solve Both")
+    map { it.timeBoth }.printHistogramMinutes(bucketSize = 5, overflow = 120)
+}
+
+//region CHART PRINTERS
 
 fun List<Int>.printHistogram(min: Int? = 0, bucketSize: Int = 1000, overflow: Int = Int.MAX_VALUE) {
     val SIZE = 3
@@ -204,33 +233,9 @@ fun List<Data>.printChart() {
     }
 }
 
-fun List<Data>.printRankStats() {
-    printHeader("Part 1 Ranks")
-    map { it.rank }.sorted().printSummary()
-    map { it.rank }.printHistogram(bucketSize = 5000, overflow = 65000)
+//endregion
 
-    printHeader("Part 2 Ranks")
-    map { it.rank2 }.sorted().printSummary()
-    map { it.rank2 }.printHistogram(bucketSize = 5000, overflow = 125000)
-
-    printHeader("Number of Ranks Dropped")
-    map { it.rank - it.rank2 }.sortedDescending().improvementSummary()
-    map { it.rank - it.rank2 }.printHistogram(min = -10000, bucketSize = 2000, overflow = 22000)
-}
-
-fun List<Data>.printTimeStats() {
-    printHeader("Time to Solve Part 1")
-//    map { it.timePart1 }.sorted().map { it.hms() }.printSummary()
-    map { it.timePart1 }.printHistogramMinutes(bucketSize = 2, overflow = 60)
-
-    printHeader("Time to Solve Part 2")
-//    map { it.timePart2 }.sorted().map { it.hms() }.printSummary()
-    map { it.timePart2 }.printHistogramMinutes(bucketSize = 2, overflow = 60)
-
-    printHeader("Time to Solve Both")
-//    map { it.timeBoth }.sorted().map { it.hms() }.printSummary()
-    map { it.timeBoth }.printHistogramMinutes(bucketSize = 2, overflow = 60)
-}
+//region ANSI UTILS AND FORMATTERS
 
 fun String.colorStars(): String {
     // find each substring of stars, and add a color code before each, then an ansi reset after the last star
@@ -250,6 +255,16 @@ fun String.colorStars(): String {
     return result
 }
 
+fun Int.hms() = if (this >= 3600) {
+    "%02d:%02d:%02d".format(this / 3600, (this % 3600) / 60, this % 60)
+} else {
+    "%5d:%02d".format(this / 60, this % 60)
+}
+
+fun Int.minSec() = "%2d:%02d".format(this / 60, this % 60)
+
+//endregion
+
 data class Data(
     val day: Int,
     val time: String,
@@ -264,13 +279,5 @@ data class Data(
 
     private fun String.parseTime() = split(':').map { it.toInt() }.let { (h, m, s) -> h * 3600 + m * 60 + s }
 }
-
-fun Int.hms() = if (this >= 3600) {
-    "%02d:%02d:%02d".format(this / 3600, (this % 3600) / 60, this % 60)
-} else {
-    "%5d:%02d".format(this / 60, this % 60)
-}
-
-fun Int.minSec() = "%2d:%02d".format(this / 60, this % 60)
 
 //endregion

@@ -158,6 +158,7 @@ private fun printStarIntervals(year: Int, day: Int, info: List<AocDay>, userBin:
     val userBin1 = userBin?.let { binStar(date, it.puzzle1Ts) }
     val userBin2 = userBin?.puzzle2Ts?.let { binStar(date, it) }
     val userStars = info.filter { it != userBin }.sortedBy { it.puzzle1Ts }.map {
+        // bin relative to either given date (if DatedAocDay) or absolute date
         val useDate = if (it is DatedAocDay) LocalDate.of(year, Month.DECEMBER, it.day) else date
         binStar(useDate, it.puzzle1Ts) to it.puzzle2Ts?.let { binStar(useDate, it) }
     }
@@ -209,7 +210,7 @@ private fun printStarIntervals(year: Int, day: Int, info: List<AocDay>, userBin:
             str = str.replace(OTHER_COLOR, HIGHLIGHT_COLOR).replace(OTHER_DARK, HIGHLIGHT_DARK).replace(OTHER_SUBTLE, HIGHLIGHT_SUBTLE)
         println(str)
     }
-    printAxis(BIN_COUNT, day, year)
+    printAxis(BIN_COUNT, if (info.firstOrNull() is DatedAocDay) -1 else day, year)
 }
 
 private class ChartInterval(val row: Int, val start: Int, val end: Int?, val color: String) {
@@ -233,7 +234,8 @@ private fun List<ChartInterval>.intersecting(row: Int, start: Int, end: Int?) =
 /** Print axis. */
 private fun printAxis(bins: Int, day: Int, year: Int) {
     // print out every 6 hours with spaces in between
-    println("-".repeat(bins + 6) + " Dec $day, $year")
+    val date = if (day == -1) "Dec $year" else "Dec $day, $year"
+    println("-".repeat(bins + 6) + " $date")
     val spaceBetweenTicks = bins / 4
     print(" 0h")
     print("%${spaceBetweenTicks - 2}s".format("6h"))
