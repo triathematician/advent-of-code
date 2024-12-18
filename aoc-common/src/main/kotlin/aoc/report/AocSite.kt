@@ -16,8 +16,8 @@ object AocSite {
 
     /** Get leaderboards. */
     fun getLeaderboards(year: Int) {
-        download(year, "leaderboard/private/view/917872.json", "leaderboard.json", MIN_LEADERBOARD_REFRESH_MILLIS)
-        download(year, "leaderboard/private/view/3240090.json", "leaderboard2.json", MIN_LEADERBOARD_REFRESH_MILLIS)
+        download(year, "leaderboard/private/view/917872.json", "stats/leaderboard.json", MIN_LEADERBOARD_REFRESH_MILLIS)
+        download(year, "leaderboard/private/view/3240090.json", "stats/leaderboard2.json", MIN_LEADERBOARD_REFRESH_MILLIS)
     }
 
     fun download(year: Int, aocPath: String, locPath: String, refreshTime: Int): String {

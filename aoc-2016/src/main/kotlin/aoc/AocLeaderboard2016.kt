@@ -9,7 +9,7 @@ object AocLeaderboard2016 {
     fun main(args: Array<String>) {
         printLeaderboard(2016)
         // read personal times from text
-        val personalTimesText = resourceFile(2016, "personal_times.txt").readText()
+        val personalTimesText = resourceFile(2016, "stats/personaltimes.txt").readText()
             .substringAfter("--------Part 2--------").trim()
         printStats(personalTimesText)
     }

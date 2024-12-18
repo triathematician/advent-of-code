@@ -19,7 +19,7 @@ fun main() {
     printLeaderboard("leaderboard.json", highlight = "2651623", intervals = true)
     println("\n\n")
     println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Leaderboard 2 (Kotlin):$ANSI_RESET")
-    printLeaderboard("leaderboard2.json", highlight = "2651623", reduceFactor = 1, intervals = true)
+    printLeaderboard("leaderboard2.json", highlight = "2651623", intervals = true)
     println("\n\n")
     println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Personal Solve Times:$ANSI_RESET")
     printSolveTimes("leaderboard.json", user = "2651623", intervals = true)

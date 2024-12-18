@@ -13,13 +13,13 @@ fun printLeaderboard(year: Int) {
     getLeaderboards(year)
     println("\n\n")
     println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Leaderboard 1 (JHU/APL):$ANSI_RESET")
-    printLeaderboard(year, "leaderboard.json", highlight = "2651623", intervals = true)
+    printLeaderboard(year, "stats/leaderboard.json", highlight = "2651623", intervals = true)
     println("\n\n")
     println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Leaderboard 2 (Kotlin):$ANSI_RESET")
-    printLeaderboard(year, "leaderboard2.json", highlight = "2651623", reduceFactor = 1, intervals = true)
+    printLeaderboard(year, "stats/leaderboard2.json", highlight = "2651623", reduceFactor = 1, intervals = true)
     println("\n\n")
     println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Personal Solve Times:$ANSI_RESET")
-    printSolveTimes(year, "leaderboard.json", user = "2651623", intervals = true)
+    printSolveTimes(year, "stats/leaderboard.json", user = "2651623", intervals = true)
 }
 
 private const val HIGHLIGHT_COLOR = ANSI_LIGHT_GREEN
