@@ -10,7 +10,7 @@ object AocLeaderboard2016 {
         printLeaderboard(2016)
         // read personal times from text
         val personalTimesText = resourceFile(2016, "stats/personaltimes.txt").readText()
-            .substringAfter("--------Part 2--------").trim()
+            .substringAfter("Part 2").substringAfter("\n").trim()
         printStats(personalTimesText)
     }
 }
