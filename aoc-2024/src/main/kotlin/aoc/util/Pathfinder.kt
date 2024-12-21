@@ -2,7 +2,7 @@ package aoc.util
 
 import java.util.PriorityQueue
 
-/** Find way from start to target, given set of adjacencies. */
+/** Find BFS path from start to target, given set of adjacencies. */
 class Pathfinder<X>(val start: X, val adj: (X) -> Iterable<X>) {
 
     /** Generates path from start to target (standard BFS). */
@@ -75,29 +75,29 @@ class Pathfinder<X>(val start: X, val adj: (X) -> Iterable<X>) {
 }
 
 /** Use A* algorithm to find shortest path from start to target. */
-class AstarSearch<X>(val start: X, val goal: (X) -> Boolean, val adj: (X) -> Map<X, Int>, val heuristicToFinish: (X) -> Int) {
+class AstarSearch<X>(val start: X, val goal: (X) -> Boolean, val adj: (X) -> Map<X, Long>, val heuristicToFinish: (X) -> Long) {
     /** Generate path from start to target that minimizes cost, returning path with scores for each step. */
-    fun minimizeCost(): Pair<List<X>, Int> {
+    fun minimizeCost(): Pair<List<X>, Long> {
         // track nodes to be expanded - can be priority queue by f() value
-        val openSet = PriorityQueue<Pair<X, Int>>(compareBy { it.second })
+        val openSet = PriorityQueue<Pair<X, Long>>(compareBy { it.second })
         // track nodes preceding each node on cheapest path from start
         val cameFrom = mutableMapOf<X, X>()
         // track currently known cost of cheapest path from start to node
-        val gScore = mutableMapOf(start to 0)
+        val gScore = mutableMapOf(start to 0L)
         // track g(n) + h(n), current best guess for cheapest path through node
         val fScore = mutableMapOf(start to heuristicToFinish(start))
 
         openSet.add(start to fScore[start]!!)
         while (openSet.isNotEmpty()) {
             val current = openSet.poll()
-            printCheapestPath(cameFrom, current.first)
+//            printCheapestPath(cameFrom, current.first)
 
             if (goal(current.first))
                 return reconstructPath(cameFrom, current.first)
 
             adj(current.first).forEach { (neighbor, dist) ->
                 val tentativeGScore = gScore[current.first]!! + dist
-                if (tentativeGScore < gScore.getOrDefault(neighbor, Int.MAX_VALUE)) {
+                if (tentativeGScore < gScore.getOrDefault(neighbor, Long.MAX_VALUE)) {
                     cameFrom[neighbor] = current.first
                     gScore[neighbor] = tentativeGScore
                     fScore[neighbor] = tentativeGScore + heuristicToFinish(neighbor)
@@ -110,17 +110,17 @@ class AstarSearch<X>(val start: X, val goal: (X) -> Boolean, val adj: (X) -> Map
     }
 
     /** Generate list of all paths from start to target that minimizes cost, returning path with scores for each step. */
-    fun minimizeCostAll(): Pair<List<List<X>>, Int> {
+    fun minimizeCostAll(): Pair<List<List<X>>, Long> {
         // track nodes to be expanded - can be priority queue by f() value
-        val openSet = PriorityQueue<Pair<X, Int>>(compareBy { it.second })
+        val openSet = PriorityQueue<Pair<X, Long>>(compareBy { it.second })
         // track nodes preceding each node on cheapest path from start
         val cameFrom = mutableMapOf<X, MutableSet<X>>()
         // track currently known cost of cheapest path from start to node
-        val gScore = mutableMapOf(start to 0)
+        val gScore = mutableMapOf(start to 0L)
         // track g(n) + h(n), current best guess for cheapest path through node
         val fScore = mutableMapOf(start to heuristicToFinish(start))
         // minimum cost to finish
-        var minCost = Int.MAX_VALUE
+        var minCost = Long.MAX_VALUE
         // all paths that minimize cost from start to finish
         val minCostPaths = mutableListOf<List<X>>()
 
@@ -142,7 +142,7 @@ class AstarSearch<X>(val start: X, val goal: (X) -> Boolean, val adj: (X) -> Map
 
             adj(current.first).forEach { (neighbor, dist) ->
                 val tentativeGScore = gScore[current.first]!! + dist
-                val prevGScore = gScore.getOrDefault(neighbor, Int.MAX_VALUE)
+                val prevGScore = gScore.getOrDefault(neighbor, Long.MAX_VALUE)
                 if (tentativeGScore < prevGScore) {
                     cameFrom[neighbor] = mutableSetOf(current.first)
                     gScore[neighbor] = tentativeGScore
@@ -158,9 +158,9 @@ class AstarSearch<X>(val start: X, val goal: (X) -> Boolean, val adj: (X) -> Map
     }
 
     /** Reconstruct path from start to current node, returning list of nodes and total cost. */
-    fun reconstructPath(cameFrom: Map<X, X>, current: X): Pair<List<X>, Int> {
+    fun reconstructPath(cameFrom: Map<X, X>, current: X): Pair<List<X>, Long> {
         val path = mutableListOf(current)
-        var totalCost = 0
+        var totalCost = 0L
         var curr = current
         while (curr in cameFrom) {
             val prev = cameFrom[curr]!!
@@ -173,14 +173,14 @@ class AstarSearch<X>(val start: X, val goal: (X) -> Boolean, val adj: (X) -> Map
 
     /** Reconstruct multiple paths from start to current node, returning list of nodes and total cost. */
     // construct paths recursively
-    fun reconstructPathsRec(cameFrom: Map<X, Set<X>>, current: X): Pair<List<List<X>>, Int> {
+    fun reconstructPathsRec(cameFrom: Map<X, Set<X>>, current: X): Pair<List<List<X>>, Long> {
         if (current !in cameFrom) return listOf(listOf(current)) to 0
         val paths = mutableListOf<List<X>>()
         for (prev in cameFrom[current]!!) {
             val (subPaths, _) = reconstructPathsRec(cameFrom, prev)
             paths.addAll(subPaths.map { it + current })
         }
-        val cost = paths.first().fold(0) { acc, node -> acc + (adj(node)[current] ?: 0) }
+        val cost = paths.first().fold(0L) { acc, node -> acc + (adj(node)[current] ?: 0L) }
         return paths to cost
     }
 
