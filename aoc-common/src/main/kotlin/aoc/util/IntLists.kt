@@ -18,3 +18,12 @@ fun List<Int>.triangle(): Boolean {
             && this[0] + this[2] > this[1]
             && this[1] + this[2] > this[0]
 }
+
+//region IntRange UTILS
+
+fun List<IntRange>.fullyOverlapping() = this[0].containsAll(this[1]) || this[1].containsAll(this[0])
+fun List<IntRange>.fullyDisjoint() = this[0].last < this[1].first || this[1].last < this[0].first
+
+fun IntRange.containsAll(other: IntRange) = contains(other.first) && contains(other.last)
+
+//endregion

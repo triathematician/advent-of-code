@@ -29,6 +29,26 @@ class CharGrid(_ch: List<String>) {
     fun find(ch: Char) = allIndices().first { at(it) == ch }
     fun find(pred: (Char) -> Boolean): Map<Char, List<Coord>> =
         allIndices().filter { pred(ch[it]) }.groupBy { ch[it] }
+
+    fun print() {
+        ch.forEach { println(it) }
+    }
+
+    /** Prints in pretty form, with each pair of rows combined into a single character. */
+    fun printPretty(solid: Char = '#') {
+        ch.chunked(2).forEach {
+            val row1 = it[0]
+            val row2 = if (it.size == 2) it[1] else " ".repeat(row1.length)
+            println(row1.zip(row2).joinToString("") { twoGridCellsCombined(it, solid).toString() })
+        }
+    }
+
+    private fun twoGridCellsCombined(pair: Pair<Char, Char>, solid: Char) = when {
+        pair.first == solid && pair.second == solid -> '█'
+        pair.first == solid -> '▀'
+        pair.second == solid -> '▄'
+        else -> ' '
+    }
 }
 
 fun List<String>.grid() = CharGrid(this)
