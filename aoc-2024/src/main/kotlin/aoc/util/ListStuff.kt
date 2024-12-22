@@ -1,5 +1,8 @@
 package aoc.util
 
+/** Count of each element in a list. */
+fun <E> List<E>.eachCount() = groupBy { it }.mapValues { it.value.size }
+
 /** get second item in a collection. */
 fun <E> Collection<E>.second(): E = drop(1).first()
 
