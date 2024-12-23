@@ -5,17 +5,17 @@ import kotlin.random.Random
 
 fun String.alternateRedGreen() = toCharArray().toList().chunked(2).joinToString("") {
     "$ANSI_RED${it[0]}" + (if (it.size == 2) "$ANSI_GREEN${it[1]}" else "")
-}
+} + ANSI_RESET
 
 fun String.alternateBlueWhite() = toCharArray().toList().chunked(2).joinToString("") {
     "$ANSI_LIGHT_BLUE${it[0]}" + (if (it.size == 2) "$ANSI_WHITE${it[1]}" else "")
-}
+} + ANSI_RESET
 
 fun String.randomColors(vararg colors: String) = toCharArray().toList().chunked(2).joinToString("") {
     val ansi1 = colors.random()
     val ansi2 = colors.random()
     "$ANSI_BOLD${ansi1}${it[0]}" + (if (it.size == 2) "${ansi2}${it[1]}" else "")
-}
+} + ANSI_RESET
 
 fun alignWord(word: String, blockLength: Int, align: String): String {
     return when (align.toLowerCase()) {

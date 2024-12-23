@@ -2,24 +2,76 @@ package aoc.report
 
 import aoc.report.AocSite.getLeaderboards
 import aoc.report.AocSite.readLeaderboard
+import aoc.report.AocSite.resourceFile
 import aoc.util.*
 import com.fasterxml.jackson.annotation.JsonCreator
-import java.time.LocalDate
-import java.time.Month
-import java.time.ZoneId
+import java.time.*
 import kotlin.math.ceil
 
+private const val USER = "2651623"
+
+/** Prints a visual representation of the leaderboard for a given year. */
 fun printLeaderboard(year: Int) {
     getLeaderboards(year)
+    printPersonalSolveTimes(year, USER)
     println("\n\n")
     println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Leaderboard 1 (JHU/APL):$ANSI_RESET")
-    printLeaderboard(year, "stats/leaderboard.json", highlight = "2651623", intervals = true)
+    printLeaderboard(year, "stats/leaderboard.json", highlight = USER, intervals = true)
     println("\n\n")
     println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Leaderboard 2 (Kotlin):$ANSI_RESET")
-    printLeaderboard(year, "stats/leaderboard2.json", highlight = "2651623", reduceFactor = 1, intervals = true)
+    printLeaderboard(year, "stats/leaderboard2.json", highlight = USER, intervals = true)
     println("\n\n")
     println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Personal Solve Times:$ANSI_RESET")
-    printSolveTimes(year, "stats/leaderboard.json", user = "2651623", intervals = true)
+    printSolveTimes(year, "stats/leaderboard.json", user = USER, intervals = true)
+}
+
+/**
+ * Prints a visual representation of individual solve times for a given year.
+ * Goal is to make this look as much as possible like the AOC website, but with an indicator of number of days in addition to solve hms.
+ */
+fun printPersonalSolveTimes(year: Int, user: String) {
+    getLeaderboards(year)
+    val leaderboard = readLeaderboard(year, "stats/leaderboard.json")
+    val userDays = leaderboard.members[user]!!.completion_day_level.toSortedMap().map {
+        DatedAocDay(it.key.toInt(), it.value)
+    }.sortedBy { it.day }
+    (1..25).forEach {
+        val f = resourceFile(year, "input/aoc$it.txt")
+        if (f.lastModified() > 0)
+            userDays[it - 1].inputTs = f.lastModified()
+    }
+
+    // calculate number of days from start of puzzle to given timestamp
+    fun daysTo(day: Int, ts: Long) = Duration.between(
+        LocalDate.of(year, Month.DECEMBER, day).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant(),
+        Instant.ofEpochSecond(ts)
+    ).toDays()
+    // print HH:MM:SS from start of day to given timestamp
+    fun hmsFromDaysTo(ts: Long) = Duration.between(
+        LocalDate.ofInstant(Instant.ofEpochSecond(ts), ZoneId.systemDefault()).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant(),
+        Instant.ofEpochSecond(ts)
+    ).let { "%2d:%02d:%02d".format(it.toHoursPart(), it.toMinutesPart(), it.toSecondsPart()) }
+    // print DDD:HH:MM:SS between two timestamps
+    fun daysHmsBetween(ts1: Long, ts2: Long) = Duration.between(
+        if (ts1 > 200000000000L) Instant.ofEpochMilli(ts1) else Instant.ofEpochSecond(ts1),
+        Instant.ofEpochSecond(ts2)
+    ).let { "%03d:%02d:%02d:%02d".format(it.toDays(), it.toHoursPart(), it.toMinutesPart(), it.toSecondsPart()) }
+        .removePrefix("000:").removePrefix("00:").removePrefix("0")
+
+    println("      --------Part 1--------   --------Part 2--------   -----Since Input----")
+    println("Day     Days     Time   Rank     Days     Time   Rank       Time1      Time2")
+    userDays.sortedByDescending { it.day }.forEach {
+        print("%-2s".format(it.day))
+        print("%10s".format(daysTo(it.day, it.puzzle1Ts)))
+        print("%9s".format(hmsFromDaysTo(it.puzzle1Ts)))
+        print("%7s".format("?"))
+        print("%9s".format(if (it.puzzle2Ts == null) "" else daysTo(it.day, it.puzzle2Ts)))
+        print("%9s".format(if (it.puzzle2Ts == null) "" else hmsFromDaysTo(it.puzzle2Ts)))
+        print("%7s".format("?"))
+        print("%12s".format(if (it.inputTs != null) daysHmsBetween(it.inputTs!!, it.puzzle1Ts) else "?"))
+        print("%11s".format(if (it.puzzle2Ts != null) daysHmsBetween(it.puzzle1Ts, it.puzzle2Ts) else "?"))
+        println()
+    }
 }
 
 private const val HIGHLIGHT_COLOR = ANSI_LIGHT_GREEN
@@ -40,7 +92,7 @@ private fun printLeaderboard(year: Int, jsonFile: String, highlight: String? = n
     days.keys.map { it.toInt() }.sorted().forEach {
         val userBin = leaderboard.members[highlight]?.completion_day_level?.get(it.toString())
         if (intervals)
-            printStarIntervals(year, it, days[it.toString()]!!, userBin, reduceFactor)
+            printStarIntervals(year, it, days[it.toString()]!!, userBin, reduceFactor, userOnly = false)
         else
             printStars(year, it, days[it.toString()]!!, userBin, reduceFactor)
     }
@@ -53,7 +105,7 @@ private fun printSolveTimes(year: Int, jsonFile: String, user: String, reduceFac
         DatedAocDay(it.key.toInt(), it.value)
     }
     if (intervals)
-        printStarIntervals(year, 1, userDays, null, reduceFactor)
+        printStarIntervals(year, 1, userDays, null, reduceFactor, userOnly = true)
     else
         printStars(year, 1, userDays, null, reduceFactor)
 }
@@ -85,7 +137,8 @@ open class AocDay(
     val puzzle1Index: Int,
     val puzzle1Ts: Long,
     val puzzle2Index: Int?,
-    val puzzle2Ts: Long?
+    val puzzle2Ts: Long?,
+    var inputTs: Long? = null
 ) {
     @JsonCreator
     constructor(`1`: Map<String, Long>, `2`: Map<String, Long> = mapOf()) : this(
@@ -142,7 +195,7 @@ private fun printStars(year: Int, day: Int, info: List<AocDay>, userBin: AocDay?
 }
 
 /** Print stars while showing intervals between first and second. */
-private fun printStarIntervals(year: Int, day: Int, info: List<AocDay>, userBin: AocDay?, reduceFactor: Int) {
+private fun printStarIntervals(year: Int, day: Int, info: List<AocDay>, userBin: AocDay?, reduceFactor: Int, userOnly: Boolean) {
     val date = LocalDate.of(year, Month.DECEMBER, day)
     val userBin1 = userBin?.let { binStar(date, it.puzzle1Ts) }
     val userBin2 = userBin?.puzzle2Ts?.let { binStar(date, it) }
@@ -194,7 +247,7 @@ private fun printStarIntervals(year: Int, day: Int, info: List<AocDay>, userBin:
                 pos = interval.last
             }
         }
-        if (userBin == null)
+        if (userOnly && userBin == null)
             str = str.replace(OTHER_COLOR, HIGHLIGHT_COLOR).replace(OTHER_DARK, HIGHLIGHT_DARK).replace(OTHER_SUBTLE, HIGHLIGHT_SUBTLE)
         println(str)
     }
