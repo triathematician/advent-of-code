@@ -1,6 +1,5 @@
 package aoc.report
 
-import aoc.AocDay0
 import aoc.input.ROOT_FOLDER
 import aoc.input.SESSION_ID
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -16,8 +15,8 @@ object AocSite {
 
     /** Get leaderboards. */
     fun getLeaderboards(year: Int) {
-        download(year, "leaderboard/private/view/917872.json", "stats/leaderboard.json", MIN_LEADERBOARD_REFRESH_MILLIS)
-        download(year, "leaderboard/private/view/3240090.json", "stats/leaderboard2.json", MIN_LEADERBOARD_REFRESH_MILLIS)
+        download(year, "leaderboard/private/view/917872.json", "site/stats/leaderboard.json", MIN_LEADERBOARD_REFRESH_MILLIS)
+        download(year, "leaderboard/private/view/3240090.json", "site/stats/leaderboard2.json", MIN_LEADERBOARD_REFRESH_MILLIS)
     }
 
     fun download(year: Int, aocPath: String, locPath: String, refreshTime: Int): String {
@@ -26,7 +25,7 @@ object AocSite {
         if (!file.exists() || ts - file.lastModified() > refreshTime) {
             file.parentFile.mkdirs()
             readAocText(year, aocPath)?.let {
-                println("Successfully downloaded $locPath from $aocPath.")
+                println("Successfully downloaded $locPath from $aocPath - ${file.absolutePath}.")
                 file.writeText(it)
                 return it
             }

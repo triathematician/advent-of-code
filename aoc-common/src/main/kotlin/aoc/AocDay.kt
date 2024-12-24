@@ -11,7 +11,7 @@ abstract class AocDay(val day: Int, val year: Int = 2015) {
 
     abstract val testinput: List<String>
 
-    lateinit var input: List<String>
+    val input: List<String> by lazy { getDayInput(day, year) }
     open val info: String = ""
 
     abstract fun calc1(input: List<String>): Any?
@@ -23,8 +23,6 @@ abstract class AocDay(val day: Int, val year: Int = 2015) {
     fun part2() = calc2(input)
 
     fun run() {
-        input = getDayInput(day, year)
-
         val testResult = test1()
 
         println("•".repeat(23).alternateRedGreen())

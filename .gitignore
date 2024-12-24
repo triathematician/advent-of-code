@@ -3,8 +3,16 @@ leaderboard.json
 leaderboard2.json
 
 .idea/
+.gradle/
 target/
+build/
 *.iml
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Avoid ignore Gradle wrappper properties
+!gradle-wrapper.properties
 
 # Compiled class file
 *.class

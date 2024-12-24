@@ -1,2 +1,5 @@
-package aoc.fx 
+package aoc.fx
 
+import tornadofx.View
+
+abstract class AocDayView : View()

@@ -10,6 +10,6 @@ val SESSION_ID = File("D:\\code\\advent-of-code\\cookie.txt").readText()
 
 /** Get input for given day and year of AOC, copy into a local directory. */
 fun getDayInput(day: Int, year: Int): List<String> {
-    val input = AocSite.download(year, "day/$day/input", "input/aoc$day.txt", Int.MAX_VALUE)
+    val input = AocSite.download(year, "day/$day/input", "site/input/aoc$day.txt", Int.MAX_VALUE)
     return input.trim().lines()
 }

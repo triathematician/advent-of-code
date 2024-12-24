@@ -16,13 +16,13 @@ fun printLeaderboard(year: Int) {
     printPersonalSolveTimes(year, USER)
     println("\n\n")
     println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Leaderboard 1 (JHU/APL):$ANSI_RESET")
-    printLeaderboard(year, "stats/leaderboard.json", highlight = USER, intervals = true)
+    printLeaderboard(year, "site/stats/leaderboard.json", highlight = USER, intervals = true)
     println("\n\n")
     println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Leaderboard 2 (Kotlin):$ANSI_RESET")
-    printLeaderboard(year, "stats/leaderboard2.json", highlight = USER, intervals = true)
+    printLeaderboard(year, "site/stats/leaderboard2.json", highlight = USER, intervals = true)
     println("\n\n")
     println("${ANSI_LIGHT_YELLOW}${ANSI_BOLD}Personal Solve Times:$ANSI_RESET")
-    printSolveTimes(year, "stats/leaderboard.json", user = USER, intervals = true)
+    printSolveTimes(year, "site/stats/leaderboard.json", user = USER, intervals = true)
 }
 
 /**
@@ -31,12 +31,12 @@ fun printLeaderboard(year: Int) {
  */
 fun printPersonalSolveTimes(year: Int, user: String) {
     getLeaderboards(year)
-    val leaderboard = readLeaderboard(year, "stats/leaderboard.json")
+    val leaderboard = readLeaderboard(year, "site/stats/leaderboard.json")
     val userDays = leaderboard.members[user]!!.completion_day_level.toSortedMap().map {
         DatedAocDay(it.key.toInt(), it.value)
     }.sortedBy { it.day }
     (1..25).forEach {
-        val f = resourceFile(year, "input/aoc$it.txt")
+        val f = resourceFile(year, "site/input/aoc$it.txt")
         if (f.lastModified() > 0)
             userDays[it - 1].inputTs = f.lastModified()
     }

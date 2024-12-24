@@ -23,6 +23,23 @@ class AocDay1: AocDay(1, 2016) {
         return pos.taxicab(ORIGIN)
     }
 
+    fun vis1(): List<Coord> {
+        val visited = mutableListOf<Coord>()
+        var pos = ORIGIN
+        var dir = UP
+        input[0].split(", ").forEach {
+            when (it[0]) {
+                'R' -> dir = dir.turnRight()
+                'L' -> dir = dir.turnLeft()
+            }
+            (1..it.substring(1).toInt()).forEach { _ ->
+                pos += dir
+                visited += pos
+            }
+        }
+        return visited
+    }
+
     override fun calc2(input: List<String>): Int {
         val visited = mutableSetOf<Coord>()
         var pos = ORIGIN
@@ -32,7 +49,7 @@ class AocDay1: AocDay(1, 2016) {
                 'R' -> dir = dir.turnRight()
                 'L' -> dir = dir.turnLeft()
             }
-            (1..it.substring(1).toInt()).forEach {
+            repeat(it.substring(1).toInt()) {
                 pos += dir
                 if (visited.contains(pos)) return pos.taxicab(ORIGIN)
                 else visited += pos

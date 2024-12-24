@@ -1,3 +1,5 @@
+package aoc.report
+
 import aoc.util.*
 
 object AocStats {

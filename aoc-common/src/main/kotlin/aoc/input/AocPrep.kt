@@ -1,7 +1,7 @@
 package aoc.input
 
 import aoc.report.AocSite.rootDir
-import printHeader
+import aoc.report.printHeader
 import java.io.File
 import java.time.LocalDate
 import java.time.Month
