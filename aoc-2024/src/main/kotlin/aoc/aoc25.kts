@@ -4,12 +4,75 @@ import aoc.getDayInput
 import aoc.util.*
 
 val testInput = """
+#####
+.####
+.####
+.####
+.#.#.
+.#...
+.....
 
+#####
+##.##
+.#.##
+...##
+...#.
+...#.
+.....
+
+.....
+#....
+#....
+#...#
+#.#.#
+#.###
+#####
+
+.....
+.....
+#.#..
+###..
+###.#
+###.#
+#####
+
+.....
+.....
+.....
+#....
+#.#..
+#.#.#
+#####
 """.parselines
+
+fun List<String>.parse() = splitOnEmptyLines().map {
+    if (it[0] == "#####") {
+        // lock
+        Lock((0..4).map { col -> it.indices.last { row -> it[row][col] == '#' } })
+    } else if (it[0] == ".....") {
+        // key
+        Key((0..4).map { col -> 6 - it.indices.first { row -> it[row][col] == '#' } })
+    } else {
+        error("Unknown item type")
+    }
+}
+
+interface Item
+class Lock(val cols: List<Int>) : Item {
+    fun fits(k: Key) : Boolean {
+        return cols.zip(k.cols).all { (l, k) -> l + k <= 5 }
+    }
+}
+class Key(val cols: List<Int>) : Item
 
 // part 1
 
-fun List<String>.part1(): Int = 0
+fun List<String>.part1(): Int {
+    val items = parse()
+    val locks = items.filterIsInstance<Lock>()
+    val keys = items.filterIsInstance<Key>()
+    return locks.sumOf { l -> keys.count { l.fits(it) }}
+}
 
 // part 2
 

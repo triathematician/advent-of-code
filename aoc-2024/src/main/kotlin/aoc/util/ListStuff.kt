@@ -18,6 +18,14 @@ fun <E> List<E>.triples(): Sequence<Set<E>> = indices.asSequence().flatMap { i1 
     }
 }
 
+/** split list of strings by empty/blank lines. */
+fun List<String>.splitOnEmptyLines(): List<List<String>> =
+    fold(mutableListOf(mutableListOf<String>())) { acc, line ->
+        if (line.isBlank()) acc.add(mutableListOf())
+        else acc.last().add(line)
+        acc
+    }
+
 /** divide into [n] lists, giving one to each in order. */
 fun <E> List<E>.splitInto(n: Int): List<List<E>> = (0 until n).map { i ->
     indices.filter { it % n == i }.map { get(it) }
