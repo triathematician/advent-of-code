@@ -2,8 +2,17 @@ package aoc.util
 
 import java.util.*
 
-/** Use A* algorithm to find shortest path from start to target. */
+/**
+ * Use A* algorithm to find shortest path from start to target.
+ * The heuristic function is the estimated distance from current node to goal, and should be smaller or equal to the actual minimal cost.
+ */
 class AstarSearch<X>(val start: X, val goal: (X) -> Boolean, val adj: (X) -> Map<X, Int>, val heuristicToFinish: (X) -> Int) {
+
+    companion object {
+        fun <X> toFinish(start: X, goal: X, adj: (X) -> Set<X>, heuristicToFinish: (X) -> Int) =
+            AstarSearch(start, { it == goal }, { adj(it).associateWith { 1 } }, heuristicToFinish)
+    }
+
     /** Generate path from start to target that minimizes cost, returning path with scores for each step. */
     fun minimizeCost(): Pair<List<X>, Int> {
         // track nodes to be expanded - can be priority queue by f() value
@@ -18,7 +27,7 @@ class AstarSearch<X>(val start: X, val goal: (X) -> Boolean, val adj: (X) -> Map
         openSet.add(start to fScore[start]!!)
         while (openSet.isNotEmpty()) {
             val current = openSet.poll()
-            printCheapestPath(cameFrom, current.first)
+//            printCheapestPath(cameFrom, current.first)
 
             if (goal(current.first))
                 return reconstructPath(cameFrom, current.first)
@@ -57,7 +66,7 @@ class AstarSearch<X>(val start: X, val goal: (X) -> Boolean, val adj: (X) -> Map
             val current = openSet.poll()
             if (current.second >= minCost)
                 break
-            printCheapestPath(cameFrom.mapValues { it.value.first() }, current.first)
+//            printCheapestPath(cameFrom.mapValues { it.value.first() }, current.first)
 
             if (goal(current.first)) {
                 val paths = reconstructPathsRec(cameFrom, current.first)
