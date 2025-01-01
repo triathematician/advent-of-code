@@ -24,22 +24,34 @@ class AstarSearch<X>(val start: X, val goal: (X) -> Boolean, val adj: (X) -> Map
         // track g(n) + h(n), current best guess for cheapest path through node
         val fScore = mutableMapOf(start to heuristicToFinish(start))
 
+        // track minimum f,g,h
+        val visited = mutableSetOf(start)
+        var iter = 0
+        var minH = fScore.values.first()
+
         openSet.add(start to fScore[start]!!)
         while (openSet.isNotEmpty()) {
             val current = openSet.poll()
 //            printCheapestPath(cameFrom, current.first)
-
             if (goal(current.first))
                 return reconstructPath(cameFrom, current.first)
 
-            adj(current.first).forEach { (neighbor, dist) ->
+            val tryNext = adj(current.first) - visited
+            tryNext.forEach { (neighbor, dist) ->
                 val tentativeGScore = gScore[current.first]!! + dist
                 if (tentativeGScore < gScore.getOrDefault(neighbor, Int.MAX_VALUE)) {
                     cameFrom[neighbor] = current.first
+                    val h = heuristicToFinish(neighbor)
                     gScore[neighbor] = tentativeGScore
-                    fScore[neighbor] = tentativeGScore + heuristicToFinish(neighbor)
+                    fScore[neighbor] = tentativeGScore + h
+                    minH = minH.coerceAtMost(h)
                     openSet.add(neighbor to fScore[neighbor]!!)
                 }
+            }
+            visited.addAll(tryNext.keys)
+
+            if (++iter % 50000 == 0) {
+                println("Iteration $iter: min h=${minH}, states searched=${visited.size}")
             }
         }
 

@@ -31,8 +31,8 @@ class AocDay11: AocDay(11, 2016) {
     fun List<String>.parse2(): State {
         val part1 = parse()
         return State(
-            generators = part1.generators + mapOf("EG" to "F1"),//, "DG" to "F1"),
-            microchips = part1.microchips + mapOf("EM" to "F1"),//, "DM" to "F1")
+            generators = part1.generators + mapOf("EG" to "F1", "DG" to "F1"),
+            microchips = part1.microchips + mapOf("EM" to "F1", "DM" to "F1")
         )
     }
 
@@ -47,7 +47,16 @@ class AocDay11: AocDay(11, 2016) {
         val elevator: String = "F1"
     ) {
         val FLOORS: List<String> = listOf("F1","F2","F3","F4")
-        val types = generators.keys.map { it.first() }
+        val types = generators.keys.map { it.first() }.sorted()
+
+        /** Get mapping of items per floor. */
+        fun itemsPerFloor(): Map<String, Set<String>> {
+            val res = FLOORS.associateWith { mutableSetOf<String>() }
+            generators.forEach { (item, floor) -> res[floor]!!.add(item) }
+            microchips.forEach { (item, floor) -> res[floor]!!.add(item) }
+            res[elevator]!!.add("-E-")
+            return res
+        }
 
         /** Safe state requires microchips to either have no generators on their floor, or have their own generator. */
         fun isSafe() = types.all {
@@ -86,19 +95,43 @@ class AocDay11: AocDay(11, 2016) {
 
         /** Heuristic for number of steps to complete. */
         fun h(): Int {
-            val floorSum = generators.values.map { it.drop(1).toInt() } +
-                    microchips.values.map { it.drop(1).toInt() }
-            return floorSum.sumOf { 4 - it } / 2
+            return (types.withIndex().sumOf { (i, gen) ->
+                2 * (4 - generators["${gen}G"]!!.drop(1).toInt()) * (i + 1) +
+                (4 - microchips["${gen}M"]!!.drop(1).toInt()) * (i + 1)
+            } + 3) / 4
+        }
+
+        /** Print state. */
+        fun print() {
+            println("${"*".repeat(20)}  heuristic = ${h()}")
+            val allItems = ((generators.keys + microchips.keys) + "-E-").sorted()
+            FLOORS.reversed().forEach { floor ->
+                print("$floor ")
+                allItems.forEach { item ->
+                    val itemFloor = generators[item] ?: microchips[item] ?: elevator
+                    print("%3s".format(if (itemFloor == floor) item else "."))
+                }
+                println()
+            }
         }
     }
 
     override fun calc1(input: List<String>): Int {
+        println("-".repeat(40))
         val state = input.parse()
         if (!state.isSafe()) println("Initial state not safe: $state")
-//        val path = Pathfinder.shortestPath(state, state.finalState()) { it.moves() }
-//        return path.size - 1
-        val (path, cost) = AstarSearch.toFinish(state, state.finalState(), { it.moves().toSet() }) { it.h() }
+        println("Finding paths for part 1...")
+//        val pathA = Pathfinder.shortestPath(state, state.finalState()) { it.moves() }
+//        println("  cost of path A: ${pathA.size - 1}")
+        val (pathB, cost) = AstarSearch.toFinish(state, state.finalState(), { it.moves().toSet() }) { it.h() }
             .minimizeCost()
+        println("  cost of path B: $cost")
+//        println(if (pathA == pathB) "  Paths are identical" else "  Paths differ")
+        println("-".repeat(40))
+        pathB.forEach {
+            it.print()
+        }
+        println("-".repeat(40))
         return cost
     }
 
@@ -108,10 +141,11 @@ class AocDay11: AocDay(11, 2016) {
             println("Initial state not safe: $state")
             return -1
         }
-        val path = Pathfinder.shortestPath(state, state.finalState()) { it.moves() }
-        return path.size - 1
-//        val (path, cost) = AstarSearch.toFinish(state, state.finalState(), { it.moves().toSet() }) { it.h() }
-//            .minimizeCost()
-//        return cost
+//        val path = Pathfinder.shortestPath(state, state.finalState()) { it.moves() }
+//        return path.size - 1
+        val (path, cost) = AstarSearch.toFinish(state, state.finalState(), { it.moves().toSet() }) { it.h() }
+            .minimizeCost()
+        // result is not 73
+        return cost
     }
 }
