@@ -115,6 +115,7 @@ private fun printSolveTimes(year: Int, jsonFile: String, user: String, reduceFac
 /** Parses leaderboard.json */
 class AocLeaderboard(
     val event: String,
+    val num_days: Int = 25,
     val owner_id: Int,
     val members: Map<String, AocMember>,
     val day1_ts: Long

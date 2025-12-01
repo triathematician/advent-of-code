@@ -1,4 +1,4 @@
-package aoc.aoc2016
+package aoc.aoc2025
 
 import aoc.report.AocStats.printStats
 import aoc.report.AocSite.resourceFile
