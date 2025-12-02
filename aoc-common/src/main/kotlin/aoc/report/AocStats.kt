@@ -10,14 +10,24 @@ object AocStats {
     fun printStats(personalStats: String) {
         val data = personalStats.trimIndent().lines().drop(1).map {
             val columns = it.trim().split("\\s+".toRegex())
-            Data(
-                day = columns[0].toInt(),
-                time = columns[1],
-                rank = columns[2].toInt(),
-                time2 = columns[4],
-                rank2 = columns[5].toInt(),
-                timeFile = columns.getOrNull(7)
-            )
+            if (columns.size < 6)
+                Data(
+                    day = columns[0].toInt(),
+                    time = columns[1],
+                    rank = -1,
+                    time2 = columns[2],
+                    rank2 = -1,
+                    timeFile = null,
+                )
+            else
+                Data(
+                    day = columns[0].toInt(),
+                    time = columns[1],
+                    rank = columns[2].toInt(),
+                    time2 = columns[4],
+                    rank2 = columns[5].toInt(),
+                    timeFile = columns.getOrNull(7)
+                )
         }
         data.printChart(COLORA, COLORB, COLORC)
         data.printRankStats()
@@ -131,31 +141,33 @@ fun List<Data>.printChart(color1: String, color2: String, color3: String) {
     val rankOp = { it: Number -> kotlin.math.log2(it.toDouble()) }
 
     val sortedRanks = (map { it.rank } + map { it.rank2 }).map(rankOp).sorted()
-    val rankMin = sortedRanks.first()
-    val rankMax = sortedRanks.last()
+    if (sortedRanks.isNotEmpty()) {
+        val rankMin = sortedRanks.first()
+        val rankMax = sortedRanks.last()
 
-    val chartHeight = 20
-    val rankRatio = (rankMax - rankMin) / chartHeight.toDouble()
+        val chartHeight = 20
+        val rankRatio = (rankMax - rankMin) / chartHeight.toDouble()
 
-    val header = "%-3s | %-${chartHeight + 9}s | %-${chartHeight + 9}s |".format("Day", "Part 1", "Part 2")
-    println(header)
-    println("-".repeat(header.length))
-    map { data ->
-        val barHeight1 = ((rankOp(data.rank) - rankMin) / rankRatio).toInt().coerceAtLeast(0)
-        val barHeight2 = ((rankOp(data.rank2) - rankMin) / rankRatio).toInt().coerceAtLeast(0)
+        val header = "%-3s | %-${chartHeight + 9}s | %-${chartHeight + 9}s |".format("Day", "Part 1", "Part 2")
+        println(header)
+        println("-".repeat(header.length))
+        map { data ->
+            val barHeight1 = ((rankOp(data.rank) - rankMin) / rankRatio).toInt().coerceAtLeast(0)
+            val barHeight2 = ((rankOp(data.rank2) - rankMin) / rankRatio).toInt().coerceAtLeast(0)
 
-        val bar1 = "*".repeat(barHeight1)
-        val bar2 = "*".repeat(barHeight2)
+            val bar1 = "*".repeat(barHeight1)
+            val bar2 = "*".repeat(barHeight2)
 
-        val line = "%-3s | %${chartHeight + 9}s | %-${chartHeight + 9}s |".format(
-            data.day,
-            "[${data.rank}] $bar1",
-            "$bar2 [${data.rank2}]"
-        )
-            .replace("[", "$ANSI_WHITE[")
-            .replace("]", "]$ANSI_RESET")
-            .colorStars(color1, color2, color3)
-        println(line)
+            val line = "%-3s | %${chartHeight + 9}s | %-${chartHeight + 9}s |".format(
+                data.day,
+                "[${data.rank}] $bar1",
+                "$bar2 [${data.rank2}]"
+            )
+                .replace("[", "$ANSI_WHITE[")
+                .replace("]", "]$ANSI_RESET")
+                .colorStars(color1, color2, color3)
+            println(line)
+        }
     }
 }
 
@@ -163,6 +175,10 @@ fun List<Data>.printChart(color1: String, color2: String, color3: String) {
 
 fun List<Data>.printRankStats() {
     printHeader("Part 1 Ranks")
+    if (all { it.rank < 0 || it.rank2 < 0 }) {
+        println("No rank data available.")
+        return
+    }
     map { it.rank }.sorted().printSummary()
     map { it.rank }.printHistogram(bucketSize = 2000)
 
