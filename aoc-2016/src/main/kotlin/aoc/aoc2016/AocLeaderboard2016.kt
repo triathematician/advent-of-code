@@ -11,6 +11,6 @@ object AocLeaderboard2016 {
         // read personal times from text
         val personalTimesText = resourceFile(2016, "site/stats/personaltimes.txt").readText()
             .substringAfter("Part 2").substringAfter("\n").trim()
-        printStats(personalTimesText)
+        printStats(2016, personalTimesText)
     }
 }

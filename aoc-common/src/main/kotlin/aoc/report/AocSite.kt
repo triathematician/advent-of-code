@@ -11,7 +11,7 @@ import java.net.URL
 
 /** Tools for downloading content from the AOC site. */
 object AocSite {
-    private const val MIN_LEADERBOARD_REFRESH_MILLIS = 1000 * 60 * 5
+    private const val MIN_LEADERBOARD_REFRESH_MILLIS = 1000 * 60 * 1
 
     /** Get leaderboards. */
     fun getLeaderboards(year: Int) {
