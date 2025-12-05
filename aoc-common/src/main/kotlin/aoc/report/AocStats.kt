@@ -1,14 +1,19 @@
 package aoc.report
 
+import aoc.report.AocSite.resourceFile
 import aoc.util.*
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 object AocStats {
     val COLORA = ANSI_B_BLUE
     val COLORB = ANSI_B_PURPLE
     val COLORC = ANSI_B_PINK
 
-    fun printStats(personalStats: String) {
-        val data = personalStats.trimIndent().lines().drop(1).map {
+    fun printStats(year: Int, personalStats: String, printRanks: Boolean = true) {
+        val data = personalStats.trimIndent().lines().map {
             val columns = it.trim().split("\\s+".toRegex())
             if (columns.size < 6)
                 Data(
@@ -29,9 +34,11 @@ object AocStats {
                     timeFile = columns.getOrNull(7)
                 )
         }
-        data.printChart(COLORA, COLORB, COLORC)
-        data.printRankStats()
-        data.printTimeStats()
+        if (printRanks) {
+            data.printChart(COLORA, COLORB, COLORC)
+            data.printRankStats()
+        }
+        data.printTimeStats(year)
     }
 }
 
@@ -191,7 +198,14 @@ fun List<Data>.printRankStats() {
     map { it.rank - it.rank2 }.printHistogram(min = 0, bucketSize = 2000)
 }
 
-fun List<Data>.printTimeStats() {
+fun List<Data>.printTimeStats(year: Int) {
+    (1..25).forEach { day ->
+        val f = resourceFile(year, "site/input/aoc$day.txt")
+        if (f.lastModified() > 0)
+            find { it.day == day }?.let {
+                it.timeFileLong = f.lastModified()
+            }
+    }
     printHeader("Time to Solve Part 1")
 //    map { it.timePart1 }.sorted().map { it.hms() }.printSummary()
     mapNotNull { it.timePart1 }.printHistogramMinutes(bucketSize = 5, overflow = 60)
@@ -231,13 +245,26 @@ data class Data(
     val rank: Int,
     val time2: String,
     val rank2: Int,
-    val timeFile: String?
+    val timeFile: String?,
+    var timeFileLong: Long? = null
 ) {
-    val timePart1 = timeFile?.let { time.parseTime() - it.parseTime() }
-    val timePart2 = if (time == ">24h" || time2 == ">24h") null else time2.parseTime() - time.parseTime()
-    val timeBoth = if (timePart1 != null && timePart2 != null) timePart1 + timePart2 else null
+    val timePart1
+        get() = when {
+            time == ">24h" -> null
+            timeFile != null -> time.parseTimeSeconds() - timeFile.parseTimeSeconds()
+            timeFileLong != null -> {
+                val t = LocalDateTime.ofInstant(Instant.ofEpochMilli(timeFileLong!!), ZoneId.systemDefault())
+                val sec = t.hour * 3600 + t.minute * 60 + t.second
+                time.parseTimeSeconds() - sec
+            }
+            else -> null
+        }
+    val timePart2
+        get() = if (time == ">24h" || time2 == ">24h") null else time2.parseTimeSeconds() - time.parseTimeSeconds()
+    val timeBoth
+        get() = if (timePart1 != null && timePart2 != null) timePart1!! + timePart2!! else null
 
-    private fun String.parseTime() = split(':').map { it.toInt() }.let { (h, m, s) -> h * 3600 + m * 60 + s }
+    private fun String.parseTimeSeconds() = split(':').map { it.toInt() }.let { (h, m, s) -> h * 3600 + m * 60 + s }
 }
 
 fun Int.hms() = if (this >= 3600) {
