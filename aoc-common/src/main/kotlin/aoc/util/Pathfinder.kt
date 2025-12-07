@@ -63,6 +63,19 @@ class Pathfinder<X>(val start: X, val adj: (X) -> Iterable<X>) {
         return path
     }
 
+    /** Return all unique locations that are visited in up to n steps. */
+    fun visitedInStepCount(n: Int): Set<X> {
+        val visited = mutableSetOf(start)
+        var nextLayer = setOf(start)
+        var i = 0
+        while (i < n && nextLayer.isNotEmpty()) {
+            nextLayer = nextLayer.flatMap { adj(it) }.toSet() - visited
+            visited.addAll(nextLayer)
+            i++
+        }
+        return visited
+    }
+
     companion object {
         fun <X> shortestPath(start: X, goal: X, adj: (X) -> Iterable<X>) =
             Pathfinder(start, adj).findWayTo(goal)
