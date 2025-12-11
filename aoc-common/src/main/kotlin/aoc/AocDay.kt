@@ -18,7 +18,7 @@ abstract class AocDay(val day: Int, val year: Int = 2015) {
     abstract fun calc2(input: List<String>): Any?
 
     fun test1() = calc1(testinput)
-    fun test2() = calc2(testinput)
+    open fun test2() = calc2(testinput)
     fun part1() = calc1(input)
     fun part2() = calc2(input)
 

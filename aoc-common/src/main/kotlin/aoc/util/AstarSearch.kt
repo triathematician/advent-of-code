@@ -50,7 +50,7 @@ class AstarSearch<X>(val start: X, val goal: (X) -> Boolean, val adj: (X) -> Map
             }
             visited.addAll(tryNext.keys)
 
-            if (++iter % 50000 == 0) {
+            if (++iter % 1000000 == 0) {
                 println("Iteration $iter: min h=${minH}, states searched=${visited.size}")
             }
         }
