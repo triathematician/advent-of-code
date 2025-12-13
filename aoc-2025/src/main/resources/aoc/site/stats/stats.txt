@@ -1,14 +1,14 @@
-Here are the current completion statistics for each day; the stats on this page update every few minutes. Gold indicates users that have completed both parts of a puzzle, while silver indicates users that have completed only the first half. Each * or * represents up to 4631 users.
+Here are the current completion statistics for each day; the stats on this page update every few minutes. Gold indicates users that have completed both parts of a puzzle, while silver indicates users that have completed only the first half. Each * or * represents up to 4706 users.
 
-12       0      0
-11    9864   4874  *****
-10   11712  13316  ******
- 9   22791  20118  **********
- 8   39544   1920  **********
- 7   49229   7957  *************
- 6   58616  10131  ****************
- 5   69031   8881  *****************
- 4   79244   3513  *******************
- 3   86563  15006  ***********************
- 2  103860  15430  ***************************
- 1  135224  40739  ***************************************
+12    7090   1809  ***
+11   18805   5418  ******
+10   14394  13534  *******
+ 9   24542  20460  ***********
+ 8   41229   1980  **********
+ 7   50757   8240  *************
+ 6   60209  10345  ****************
+ 5   70555   9073  *****************
+ 4   80890   3612  *******************
+ 3   88124  15324  ***********************
+ 2  105590  15686  ***************************
+ 1  137284  41510  ***************************************

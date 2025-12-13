@@ -1,6 +1,7 @@
 These are your personal leaderboard times:
 
 Day   -Part 1-   -Part 2-
+ 12   08:23:33   08:23:53
  11   07:20:00   07:33:11
  10   09:02:03       >24h
   9   06:27:03   07:25:06

@@ -12,6 +12,8 @@ class CharGrid(_ch: List<String>) {
     val xsize = xindices.last
     val ysize = yindices.last
 
+    override fun toString() = ch.joinToString("\n")
+
     fun contains(c: Coord) = c.x in 0..xsize && c.y in 0..ysize
     fun at(c: Coord) = get(c.x, c.y)
     fun get(x: Int, y: Int) = ch[y][x]
